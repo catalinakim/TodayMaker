@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class HomeController {
+public class TodoController {
 
     private final TodoService todoService;
 
@@ -23,9 +23,15 @@ public class HomeController {
     }
 
     @GetMapping("/")
-    public String home(Model model) {
+    public String home() {
 
         return "index";
+    }
+
+    @GetMapping("/todo")
+    public String todoPage(Model model) {
+
+        return "todo/todoForm";
     }
 
 
