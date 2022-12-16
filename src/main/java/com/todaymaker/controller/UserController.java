@@ -42,8 +42,7 @@ public class UserController {
         log.info(String.valueOf(user.getJoinType()));
         log.info(user.getCreatedAt());
         User savedUser = userRepository.save(user);
-        //log.info(Long.toString(savedUser.getId()));
-        return "user/join";
-        //return "login";
+        log.info(Long.toString(savedUser.getId()));
+        return "user/login";
     }
 }
