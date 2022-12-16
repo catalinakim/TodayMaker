@@ -2,18 +2,15 @@ package com.todaymaker.domain;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
-//@Data
-@Getter
-@Setter
 @Entity
+@Getter @Setter
 @NoArgsConstructor
 public class User {
 
@@ -21,25 +18,26 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotEmpty
-    private String loginId = "what";
-    @NotEmpty
+    private String loginId;
     private String password;
-    @NotEmpty
+
+    @OneToMany(mappedBy = "user")
+    private List<Todo> todos = new ArrayList<>();
+
     private String email;
     private char joinType;
     private boolean verify;
     private boolean isDeleted;
     private String createdAt;
 
-    //public User(String loginId, String password, String email, char joinType, boolean verify) {
-    //    this.loginId = loginId;
-    //    this.password = password;
-    //    this.email = email;
-    //    this.joinType = joinType;
-    //    this.verify = verify;
-    //    this.out = false;
-    //}
+    public User(String loginId, String password, String email, char joinType, boolean verify) {
+        this.loginId = loginId;
+        this.password = password;
+        this.email = email;
+        this.joinType = joinType;
+        this.verify = verify;
+        this.isDeleted = false;
+    }
 
     public User(String loginId, String password, String email) {
         System.out.println("in const");

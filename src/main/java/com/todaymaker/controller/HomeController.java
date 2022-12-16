@@ -22,19 +22,9 @@ public class HomeController {
         log.info("init 실행");
     }
 
-    @GetMapping("/") //ArgumentResolver
-    public String homeArgumentResolver(
-            //@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member loginMember,
-            //@Login Member loginMember,
-            Model model) {
+    @GetMapping("/")
+    public String home(Model model) {
 
-        //세션에 회원 데이터가 없으면 home
-        //if (loginMember == null) {
-        //    return "home";
-        //}
-
-        //세션이 유지되면 로그인으로 이동
-        //model.addAttribute("member", loginMember);
         return "index";
     }
 
