@@ -1,5 +1,6 @@
 package com.todaymaker.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Todo {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,15 +29,24 @@ public class Todo {
 
     private String name;
 
-    public Todo(User user, Category category) {
-        this.user = user;
-        this.category = category;
-    }
+    //public Todo(User user, Category category) {
+    //    this.user = user;
+    //    this.category = category;
+    //}
 
     //==연관관계 메서드==//
-    public void setTodo(User user) {
+    public void setUser(User user) {
         this.user = user;
         user.getTodos().add(this);
+    }
+
+    //==생성 메서드==//
+    public static Todo createTodo(User user, Category category, String name) {
+        Todo todo = new Todo();
+        todo.setUser(user);
+        todo.setCategory(category);
+        todo.setName(name);
+        return todo;
     }
 
 }

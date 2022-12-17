@@ -2,6 +2,7 @@ package com.todaymaker.controller;
 
 import com.todaymaker.domain.Todo;
 import com.todaymaker.domain.User;
+import com.todaymaker.dto.TodoDto;
 import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -31,15 +32,19 @@ public class TodoController {
     @GetMapping("/todo")
     public String todoPage(Model model) {
         User user = userService.findTester();
-        Todo todo = new Todo();
+        TodoDto todo = new TodoDto();
         todo.setUser(user);
         model.addAttribute("todo", todo);
-
+        log.info("뷰에 전달된 user id: {}", user.getId());
         return "todo/todoForm";
     }
 
     @PostMapping("/todo")
-    public String addTodo(Todo todo) {
+    public String addTodo(TodoDto todoDto) {
+        System.out.println("todoDto.getName() = " + todoDto.getName());
+        //Todo todo = new Todo();  //생성자와 setter로 생성하지 않고, DTO와 생성메소드 통해서 생성
+        Todo todo = Todo.createTodo(todoDto.getUser(), todoDto.getCategory(), todoDto.getName());
+
         todoService.saveTodo(todo);
 
         return "redirect:/todos";
