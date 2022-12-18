@@ -24,6 +24,7 @@ public class Todo {
 
     //할일:카테고리 = N:1
     @ManyToOne(fetch = LAZY)
+    //@ManyToOne(fetch = LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="categoryId")
     private Category category;
 
@@ -38,6 +39,11 @@ public class Todo {
     public void setUser(User user) {
         this.user = user;
         user.getTodos().add(this);
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+        category.getTodos().add(this);
     }
 
     //==생성 메서드==//
