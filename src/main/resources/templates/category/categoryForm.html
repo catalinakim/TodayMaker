@@ -6,21 +6,23 @@
 
 <body>
 <hr class="my-4">
-<form role="form" action="/category" th:object="${categories}" method="post">
+<form role="form" action="/category" th:object="${category}" method="post">
 
     <div class="form-group">
-        <label for="category">상위 카테고리 선택(옵션)</label>
-        <select name="categoryId" id="category" class="form-control">
-            <option value="">카테고리선택</option>
+        <label for="category">상위 카테고리</label>
+        <select name="parent" id="category" class="form-control">
+            <!-- 여기서 선택한 거가 parent 카테고리인걸 어떻게 알려주지? -->
+            <option value="">카테고리 선택</option>
             <option th:each="category : ${categories}"
                     th:value="${category.id}"
                     th:text="${category.name}" />
         </select>
     </div>
+
     <div class="form-group">
-        <label for="name">카테고리 이름 입력</label>
+        <label for="name">카테고리 이름</label>
         <input type="text" th:field="*{name}" class="form-control" id="name"
-               placeholder="카테고리를 입력하세요">
+               placeholder="생성할 카테고리 이름을 입력하세요">
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
