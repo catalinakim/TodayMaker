@@ -33,5 +33,14 @@ public class Category {
         this.name = name;
     }
 
+    public void setParent(Category category) {
+        this.parent = category;
+        parent.getChild().add(this);
+    }
+
+    public void setParentNull() {
+        this.parent = null;
+    }
+
 
 }

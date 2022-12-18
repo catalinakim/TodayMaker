@@ -10,7 +10,7 @@
 
     <div class="form-group">
         <label for="category">상위 카테고리</label>
-        <select name="parent" id="category" class="form-control">
+        <select name="parent.id" th:field="*{parent.id}" id="category" class="form-control">
             <option value="">카테고리 선택</option>
             <option th:each="category : ${categories}"
                     th:value="${category.id}"
