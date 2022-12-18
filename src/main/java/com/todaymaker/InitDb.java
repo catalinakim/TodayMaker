@@ -20,7 +20,8 @@ public class InitDb {
     @PostConstruct
     public void init() {
         initService.initTestUser();
-        log.info("init '테스트 유저 생성' 실행");
+        initService.initCategory();
+        log.info("init '테스트 유저, 카테고리 쌤플 생성' 실행");
     }
 
     @Component
@@ -32,6 +33,12 @@ public class InitDb {
             User tester = createMember("test", "2022");
             em.persist(tester);
         }
+        public void initCategory() {
+            Category basicCategory1 = createCategory("취업준비");
+            Category basicCategory2 = createCategory("건강관리");
+            em.persist(basicCategory1);
+            em.persist(basicCategory2);
+        }
 
         private User createMember(String loginId, String password) {
             User user = new User();
@@ -39,20 +46,6 @@ public class InitDb {
             user.setPassword(password);
             return user;
         }
-    }
-
-    @Component
-    @Transactional
-    @RequiredArgsConstructor
-    private static class InitCategory {
-        private final EntityManager em;
-        public void sampleCategory() {
-            Category basicCategory1 = createCategory("스터디");
-            Category basicCategory2 = createCategory("건강관리");
-            em.persist(basicCategory1);
-            em.persist(basicCategory2);
-        }
-
         private Category createCategory(String name) {
             Category category = new Category();
             category.setName(name);
