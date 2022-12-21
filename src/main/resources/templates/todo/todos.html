@@ -7,7 +7,79 @@
     <title>로컬 타이틀</title>
 </head>
 
+<script type="text/javascript">
+    // XMLHttpRequest 객체 생성
+    // const xhr = new XMLHttpRequest();
 
+    // HTTP 요청 초기화
+    // xhr.open("GET", "http://localhost:8080/categories");
+    //
+    // // HTTP 요청 전송
+    // xhr.send();
+    //
+    // // load 이벤트는 HTTP 요청이 성공적으로 완료된 경우 발생한다.
+    // xhr.onload = () => {
+    //     if (xhr.status === 200) {
+    //         console.log(JSON.parse(xhr.response));
+    //         // {userId: 1, id: 1, title: "delectus aut autem", completed: false}
+    //     } else {
+    //         console.error("Error", xhr.status, xhr.statusText);
+    //     }
+    // };
+
+    function showSubCategorie(id) {
+        var eachId = id;
+        // $(function() {
+            // $("#requestBtn").on("click", function(id) {
+
+        var url = "/categories/"+eachId+"/subcategories";
+        console.log(url);
+
+        // GET 방식으로 서버에 HTTP Request를 보냄.
+        // $.get(url, {},
+        //     // { species: "고양이", name: "나비", age: 3, }, // 서버가 필요한 정보를 같이 보냄.
+        //
+        //     function(data, status) {
+        //         $("#text").html(data + "<br>" + status); // 전송받은 데이터와 전송 성공 여부를 보여줌.
+        //         // console.log(data);
+        //     }
+        // );
+        // });
+        // });
+
+        $.ajax({
+            url: url,
+            // data: book,
+            type:"GET"
+            // cache: false
+        })
+        .done(function (data, textStatus) {
+            // $("#list").replaceWith(fragment);
+            // console.log(fragment);
+            $("#text").html(data + "<br>" + textStatus);
+            console.log(data.size())
+        })
+        .fail(function(xhr, textStatus, errorThrown) {
+            $("#text").html("오류가 발생했다.<br>")
+                .append("오류명: " + errorThrown + "<br>")
+                .append("상태: " + textStatus);
+        });
+
+
+        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+        // .done(function(json) {
+        //     $("<h1>").text(json.title).appendTo("body");
+        //     $("<div class=\"content\">").html(json.html).appendTo("body");
+        // })
+        // // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
+
+        // //
+        // .always(function(xhr, status) {
+        //     $("#text").html("요청이 완료되었습니다!");
+        // });
+
+    }
+</script>
 <body>
 <div class="container">
     <hr class="my-4">
@@ -15,17 +87,27 @@
         <table class="table table-striped">
         </table>
         <ul class="list-unstyled ps-0" th:each="category : ${categories}">
-            <li class="mb-1">
-                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse"
-                    th:if="${category.parent == null}" th:text="${category.name}" aria-expanded="true">
+<!--            <li class="mb-1">-->
+<!--                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse"-->
+<!--                    th:if="${category.parent == null}" th:text="${category.name}" aria-expanded="true">-->
+<!--                    상위카테고리-->
+<!--                </button>-->
+<!--                <div th:if="${category.parent == null}" class="collapse show" id="home-collapse">-->
+<!--                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </li>-->
+            <li th:if="${category.parent == null}" class="mb-1">
+                <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse"
+                    th:text="${category.name}" th:onclick="'showSubCategorie('+${category.id}+')'" aria-expanded="true">
                     상위카테고리
                 </button>
-                <div th:if="${category.parent == null}" class="collapse show" id="home-collapse">
-                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
-                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>
-<!--                        <li><a href="#" class="link-dark rounded">Reports</a></li>-->
-                    </ul>
-                </div>
+<!--                <div class="collapse show" id="home-collapse">-->
+<!--                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>-->
+<!--                    </ul>-->
+<!--                </div>-->
             </li>
         </ul>
     </div>
@@ -34,6 +116,9 @@
     <button type="button" class="btn btn-primary px-3" onclick="location.href='/todo'">할일 추가</button>
 
 
+
+</div>
+<div id="text">
 
 </div>
 </body>

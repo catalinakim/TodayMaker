@@ -4,7 +4,6 @@ import com.todaymaker.domain.Category;
 import com.todaymaker.domain.User;
 import lombok.*;
 
-import javax.persistence.Entity;
 import javax.validation.constraints.NotEmpty;
 
 @Data

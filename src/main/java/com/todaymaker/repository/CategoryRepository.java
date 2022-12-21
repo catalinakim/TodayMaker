@@ -26,4 +26,9 @@ public class CategoryRepository {
     }
 
 
+    public List<Category> findSub(Long id) {
+        return em.createQuery("select c from Category c where c.parent.id = :id", Category.class)
+                .setParameter("id", id)
+                .getResultList();
+    }
 }
