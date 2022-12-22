@@ -1,6 +1,8 @@
 package com.todaymaker.repository;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.todaymaker.domain.Category;
+import com.todaymaker.domain.QCategory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -30,5 +32,18 @@ public class CategoryRepository {
         return em.createQuery("select c from Category c where c.parent.id = :id", Category.class)
                 .setParameter("id", id)
                 .getResultList();
+    }
+
+    public List<Category> findRootCategories() {
+        QCategory category = QCategory.category;
+
+        JPAQueryFactory query = new JPAQueryFactory(em);
+
+        return query
+                .select(category)
+                .from(category)
+                .where(category.parent.isNull())
+                .fetch();
+
     }
 }

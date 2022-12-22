@@ -34,13 +34,11 @@ public class apiCategoryController {
 
     @GetMapping("/categories/{id}/subcategories")
     public List<CategoryDto> subCategoryList(@PathVariable Long id) {
-    //public String subCategoryList(@PathVariable Long id) {
         List<Category> orders = categoryRepository.findSub(id);
         List<CategoryDto> result = orders.stream()
                 .map(o -> new CategoryDto(o))
                 .collect(toList());
         return result;
-        //return "ok";
     }
 
 

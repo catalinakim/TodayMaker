@@ -27,7 +27,8 @@
                 let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">'
                             + '<li onclick="showTodos(' + subCateArr[i]["id"]+ ')" class="link-dark rounded">' + subCateArr[i]["name"] + '</li>'
                             + '</ul>';
-                $("#cate-collapse"+id).html(subhtml);
+                // $("#cate-collapse"+id).html(subhtml);
+                $("#cate-collapse"+id).append(subhtml);
                 console.log(subCateArr[i]["id"]);
                 console.log(subCateArr[i]["name"]);
             }
@@ -40,16 +41,6 @@
                 .append("오류명: " + errorThrown + "<br>")
                 .append("상태: " + textStatus);
         });
-
-
-        // .done(function(json) {
-        //     $("<h1>").text(json.title).appendTo("body");
-        //     $("<div class=\"content\">").html(json.html).appendTo("body");
-        // })
-        // .always(function(xhr, status) {
-        //     $("#text").html("요청이 완료되었습니다!");
-        // });
-
     }
 </script>
 <body>
@@ -68,14 +59,6 @@
                 </button>
 <!--                <div class="collapse show" th:id="'cate-collapse'+${category.id}" >-->
                 <div class="collapse" th:id="'cate-collapse'+${category.id}" >
-<!--                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>-->
-<!--                    </ul>-->
-
-<!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                        <li onclick="showTodos()" class="link-dark rounded">하위카테고리</li>-->
-<!--                    </ul>-->
-
 <!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
 <!--                        <li>하위카테고리</li>-->
 <!--                    </ul>-->

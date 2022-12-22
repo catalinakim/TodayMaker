@@ -23,4 +23,8 @@ public class CategoryService {
     public List<Category> findCategories() {
         return categoryRepository.findAll();
     }
+
+    public List<Category> findRootCategories() {
+        return categoryRepository.findRootCategories();
+    }
 }
