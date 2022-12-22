@@ -8,57 +8,33 @@
 </head>
 
 <script type="text/javascript">
-    // XMLHttpRequest 객체 생성
-    // const xhr = new XMLHttpRequest();
 
-    // HTTP 요청 초기화
-    // xhr.open("GET", "http://localhost:8080/categories");
-    //
-    // // HTTP 요청 전송
-    // xhr.send();
-    //
-    // // load 이벤트는 HTTP 요청이 성공적으로 완료된 경우 발생한다.
-    // xhr.onload = () => {
-    //     if (xhr.status === 200) {
-    //         console.log(JSON.parse(xhr.response));
-    //         // {userId: 1, id: 1, title: "delectus aut autem", completed: false}
-    //     } else {
-    //         console.error("Error", xhr.status, xhr.statusText);
-    //     }
-    // };
-
-    function showSubCategorie(id) {
+    function showSubCategories(id) {
         var eachId = id;
-        // $(function() {
-            // $("#requestBtn").on("click", function(id) {
 
         var url = "/categories/"+eachId+"/subcategories";
-        console.log(url);
-
-        // GET 방식으로 서버에 HTTP Request를 보냄.
-        // $.get(url, {},
-        //     // { species: "고양이", name: "나비", age: 3, }, // 서버가 필요한 정보를 같이 보냄.
-        //
-        //     function(data, status) {
-        //         $("#text").html(data + "<br>" + status); // 전송받은 데이터와 전송 성공 여부를 보여줌.
-        //         // console.log(data);
-        //     }
-        // );
-        // });
-        // });
 
         $.ajax({
             url: url,
-            // data: book,
             type:"GET"
             // cache: false
         })
-        .done(function (data, textStatus) {
-            // $("#list").replaceWith(fragment);
-            // console.log(fragment);
-            $("#text").html(data + "<br>" + textStatus);
-            console.log(data.size())
+        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
+        .done(function (data, textStatus, jqXHR) {
+            const subCateArr = data;
+
+            for (let i = 0; i < subCateArr.length; i++) {
+                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">'
+                            + '<li onclick="showTodos(' + subCateArr[i]["id"]+ ')" class="link-dark rounded">' + subCateArr[i]["name"] + '</li>'
+                            + '</ul>';
+                $("#cate-collapse"+id).html(subhtml);
+                console.log(subCateArr[i]["id"]);
+                console.log(subCateArr[i]["name"]);
+            }
+            console.log("하위 카테고리 갯수: " + data.length);
+            console.log("상태코드: " + jqXHR.status);
         })
+        // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
         .fail(function(xhr, textStatus, errorThrown) {
             $("#text").html("오류가 발생했다.<br>")
                 .append("오류명: " + errorThrown + "<br>")
@@ -66,14 +42,10 @@
         });
 
 
-        // HTTP 요청이 성공하면 요청한 데이터가 done() 메소드로 전달됨.
         // .done(function(json) {
         //     $("<h1>").text(json.title).appendTo("body");
         //     $("<div class=\"content\">").html(json.html).appendTo("body");
         // })
-        // // HTTP 요청이 실패하면 오류와 상태에 관한 정보가 fail() 메소드로 전달됨.
-
-        // //
         // .always(function(xhr, status) {
         //     $("#text").html("요청이 완료되었습니다!");
         // });
@@ -87,27 +59,27 @@
         <table class="table table-striped">
         </table>
         <ul class="list-unstyled ps-0" th:each="category : ${categories}">
-<!--            <li class="mb-1">-->
-<!--                <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse"-->
-<!--                    th:if="${category.parent == null}" th:text="${category.name}" aria-expanded="true">-->
-<!--                    상위카테고리-->
-<!--                </button>-->
-<!--                <div th:if="${category.parent == null}" class="collapse show" id="home-collapse">-->
-<!--                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
-<!--                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </li>-->
             <li th:if="${category.parent == null}" class="mb-1">
-                <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse"
-                    th:text="${category.name}" th:onclick="'showSubCategorie('+${category.id}+')'" aria-expanded="true">
+<!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
+                <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                        th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
+                    th:onclick="'showSubCategories('+${category.id}+')'" aria-expanded="true">
                     상위카테고리
                 </button>
-<!--                <div class="collapse show" id="home-collapse">-->
+<!--                <div class="collapse show" th:id="'cate-collapse'+${category.id}" >-->
+                <div class="collapse" th:id="'cate-collapse'+${category.id}" >
 <!--                    <ul th:each="eachCategory : ${categories}" class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
 <!--                        <li th:if="${category == eachCategory.parent}" th:text="${eachCategory.name}" class="link-dark rounded">하위카테고리</li>-->
 <!--                    </ul>-->
-<!--                </div>-->
+
+<!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                        <li onclick="showTodos()" class="link-dark rounded">하위카테고리</li>-->
+<!--                    </ul>-->
+
+<!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">-->
+<!--                        <li>하위카테고리</li>-->
+<!--                    </ul>-->
+                </div>
             </li>
         </ul>
     </div>
@@ -119,7 +91,6 @@
 
 </div>
 <div id="text">
-
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
