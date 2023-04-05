@@ -6,10 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
 
-import static javax.persistence.FetchType.LAZY;
 
 @Data
 @NoArgsConstructor

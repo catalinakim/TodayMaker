@@ -11,7 +11,9 @@
     <div class="form-group">
         <label for="category">상위 카테고리</label>
         <select name="parent.id" th:field="*{parent.id}" id="category" class="form-control">
-            <option value="">카테고리 선택</option>
+<!--            <option value="">카테고리 선택</option>-->
+            <option value="">(선택안함)</option>
+<!--            선택안함 == 상위카테고리 생성 -->
             <option th:each="category : ${categories}"
                     th:value="${category.id}"
                     th:text="${category.name}" />
@@ -23,6 +25,9 @@
         <input type="text" th:field="*{name}" class="form-control" id="name"
                placeholder="생성할 카테고리 이름을 입력하세요">
     </div>
+    <br>
+    <p>* 상위 카테고리가 "선택안함" 이면, 상위 카테고리를 생성합니다.</p>
+    <p>* 상위 카테고리만 하위 카테고리를 생성할 수 있습니다.</p>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 </body>

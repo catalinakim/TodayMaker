@@ -17,7 +17,7 @@ public class InitDb {
 
     private final InitService initService;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         initService.initTestUser();
         initService.initCategory();

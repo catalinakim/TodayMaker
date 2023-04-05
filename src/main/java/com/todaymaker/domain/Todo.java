@@ -1,9 +1,6 @@
 package com.todaymaker.domain;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -12,6 +9,7 @@ import static javax.persistence.FetchType.*;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "name"})  //연관관계 필드 제외
 public class Todo {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

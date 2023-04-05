@@ -1,7 +1,7 @@
 package com.todaymaker.service;
 
 import com.todaymaker.domain.Category;
-import com.todaymaker.repository.CategoryRepository;
+import com.todaymaker.repository.CategoryJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,18 +13,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
     @Transactional
     public void saveCategory(Category category) {
-        categoryRepository.save(category);
+        categoryJpaRepository.save(category);
     }
 
     public List<Category> findCategories() {
-        return categoryRepository.findAll();
+        return categoryJpaRepository.findAll();
     }
 
     public List<Category> findRootCategories() {
-        return categoryRepository.findRootCategories();
+        return categoryJpaRepository.findRootCategories();
     }
 }

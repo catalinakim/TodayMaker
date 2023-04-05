@@ -3,19 +3,23 @@ package com.todaymaker.controller;
 import com.todaymaker.domain.Category;
 import com.todaymaker.domain.Todo;
 import com.todaymaker.domain.User;
-import com.todaymaker.dto.TodoDto;
+import com.todaymaker.dto.TodoCreateDto;
 import com.todaymaker.service.CategoryService;
 import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import javax.annotation.PostConstruct;
 import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Controller
@@ -35,7 +39,7 @@ public class TodoController {
     @GetMapping("/todo")
     public String todoPage(Model model) {
         User user = userService.findTester();
-        TodoDto todo = new TodoDto();
+        TodoCreateDto todo = new TodoCreateDto();
         todo.setUser(user);
         model.addAttribute("todo", todo);
         log.info("뷰에 전달된 user id: {}", user.getId());
@@ -46,7 +50,7 @@ public class TodoController {
     }
 
     @PostMapping("/todo")
-    public String addTodo(TodoDto todoDto) {
+    public String addTodo(TodoCreateDto todoDto) {
 
         //Todo todo = new Todo();  //생성자와 setter로 생성하지 않고, DTO와 생성메소드 통해서 생성
         Todo todo = Todo.createTodo(todoDto.getUser(), todoDto.getCategory(), todoDto.getName());
@@ -66,6 +70,5 @@ public class TodoController {
 
         return "todo/todos";
     }
-
 
 }

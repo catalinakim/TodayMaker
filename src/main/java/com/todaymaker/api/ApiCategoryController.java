@@ -2,11 +2,10 @@ package com.todaymaker.api;
 
 import com.todaymaker.domain.Category;
 import com.todaymaker.dto.CategoryDto;
-import com.todaymaker.repository.CategoryRepository;
+import com.todaymaker.repository.CategoryJpaRepository;
 import com.todaymaker.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,14 +17,14 @@ import static java.util.stream.Collectors.toList;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-public class apiCategoryController {
+public class ApiCategoryController {
 
     private final CategoryService categoryService;
-    private final CategoryRepository categoryRepository;
+    private final CategoryJpaRepository categoryJpaRepository;
 
     @GetMapping("/categories")
     public List<CategoryDto> categoryList() {
-        List<Category> orders = categoryRepository.findAll();
+        List<Category> orders = categoryJpaRepository.findAll();
         List<CategoryDto> result = orders.stream()
                 .map(o -> new CategoryDto(o))
                 .collect(toList());
@@ -34,9 +33,9 @@ public class apiCategoryController {
 
     @GetMapping("/categories/{id}/subcategories")
     public List<CategoryDto> subCategoryList(@PathVariable Long id) {
-        List<Category> orders = categoryRepository.findSub(id);
-        List<CategoryDto> result = orders.stream()
-                .map(o -> new CategoryDto(o))
+        List<Category> subCateList = categoryJpaRepository.findSub(id);
+        List<CategoryDto> result = subCateList.stream()
+                .map(c -> new CategoryDto(c))
                 .collect(toList());
         return result;
     }

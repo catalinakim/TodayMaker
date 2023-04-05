@@ -9,7 +9,7 @@ import javax.validation.constraints.NotEmpty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class TodoDto {
+public class TodoCreateDto {
     @NotEmpty
     private User user;
 
