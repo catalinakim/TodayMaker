@@ -1,16 +1,16 @@
 package com.todaymaker.api;
 
+import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
 import com.todaymaker.service.TodoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -29,6 +29,27 @@ public class ApiTodoController {
                 .map(t -> new TodoDto(t.getId(), t.getName()))
                 .collect(toList());
         return result;
+    }
+
+    @PostMapping("/todos/today")
+    public List<Todo> addTodo(@RequestBody List<Long> todoIds) {
+        List<Todo> savedTodos = todoService.saveTodoToday(todoIds);
+
+        return savedTodos;
+    }
+
+    @DeleteMapping("/todos/today")
+    public Long removeFromToday(@RequestBody Long todoId){
+    //public boolean removeFromToday(@RequestBody TodoDto todoDto){
+        todoService.removeFromToday(todoId);
+        return todoId;
+    }
+
+    @GetMapping("/todos/today")
+    public List<Optional<Todo>> getTodayTodo() {
+        List<Optional<Todo>> todayTodos = todoService.getTodayTodos();
+
+        return todayTodos;
     }
 
     @Data

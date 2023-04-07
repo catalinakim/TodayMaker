@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -64,9 +66,13 @@ public class TodoController {
     public String list(Model model) {
         List<Category> categories = categoryService.findCategories();
         model.addAttribute("categories", categories);
+        model.addAttribute("date", LocalDateTime.now());
 
         List<Todo> todos = todoService.findTodos();
         model.addAttribute("todos", todos);
+
+        List<Optional<Todo>> todayTodos = todoService.getTodayTodos();
+        model.addAttribute("todayTodos", todayTodos);
 
         return "todo/todos";
     }

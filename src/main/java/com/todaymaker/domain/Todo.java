@@ -1,5 +1,6 @@
 package com.todaymaker.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,12 +19,14 @@ public class Todo {
     //할일:사용자 = N:1
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "owner")
+    @JsonIgnore
     private User user;
 
     //할일:카테고리 = N:1
     @ManyToOne(fetch = LAZY)
     //@ManyToOne(fetch = LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinColumn(name="categoryId")
+    @JsonIgnore
     private Category category;
 
     private String name;

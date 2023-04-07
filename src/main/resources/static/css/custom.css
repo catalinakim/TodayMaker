@@ -51,3 +51,10 @@
     margin-top: .125rem;
     margin-left: 1.25rem;
 }
+
+.today-minus {
+    color: #a3a3a3;
+    float:right;
+    margin-top:10px;
+    margin-right: 10%;
+}

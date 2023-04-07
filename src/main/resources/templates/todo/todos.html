@@ -6,14 +6,10 @@
     <link href="/static/css/custom.css" rel="stylesheet">
     <title>로컬 타이틀</title>
 </head>
-
 <script type="text/javascript">
-
     function showSubCategories(id) {
         var categoryId = id;
-
         var url = "/categories/"+categoryId+"/subcategories";
-
         $.ajax({
             url: url,
             type:"GET"
@@ -43,62 +39,126 @@
     }
     function getTodos(categoryId){
         var url = "/categories/"+categoryId+"/todos";
-
         $.ajax({
             url: url,
             type:"GET"
         })
-            .done(function (data, textStatus, jqXHR) {
-                const todos = data;
+        .done(function (data, textStatus, jqXHR) {
+            const todos = data;
 
-                for (let i = 0; i < todos.length; i++) {
-                    let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">' +
-                        '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '">\n' +
-                        '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label><br>' +
-                        '</ul>';
-                    $("#cate-collapse"+categoryId).append(subhtml);
-                }
-                console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
-            })
-            .fail(function(xhr, textStatus, errorThrown) {
-                $("#text").html("할일을 불러오는데 오류 발생<br>")
-                    .append("오류명: " + errorThrown + "<br>")
-                    .append("상태: " + textStatus);
-            });
+            for (let i = 0; i < todos.length; i++) {
+                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">' +
+                    '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '">\n' +
+                    '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label><br>' +
+                    '</ul>';
+                $("#cate-collapse"+categoryId).append(subhtml);
+            }
+            console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
+        })
+        .fail(function(xhr, textStatus, errorThrown) {
+            $("#text").html("할일을 불러오는데 오류 발생<br>")
+                .append("오류명: " + errorThrown + "<br>")
+                .append("상태: " + textStatus);
+        });
     }
+    $(document).ready(function() {
+        $("#add").click(function() {
+            var checkedTodos = $('input[type=checkbox]:checked').map(function() {
+                return this.value;
+            }).get();
+            console.log(checkedTodos);
+            $.ajax({
+                url: '/todos/today',
+                type: 'POST',
+                data: JSON.stringify(checkedTodos),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    const todo = data;
+                    for (let i = 0; i < todo.length; i++) {
+                        let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 mb-0">' +
+                            '<input type="checkbox" id="todayTodo' + todo[i]["id"]+ '" name="todayTodo' + todo[i]["id"]+ '" value="' + todo[i]["id"]+ '">\n' +
+                            '<label for="todayTodo' + todo[i]["id"]+ '"> ' + todo[i]["name"]+ '</label>' +
+                            '<i class="fa-regular fa-square-minus fa-xs today-minus" ></i></ul>';
+                        $("#today").append(subhtml);
+                    }
+                }
+            });
+            $('input[type=checkbox]:checked').prop('disabled', true);
+        });
+        $(document).on("click", "i", function(){
+            console.log("i tag");
+            var removeFromToday = $(this).prev().prev().val();
+            console.log(removeFromToday);
+            $.ajax({
+                url: '/todos/today',
+                type: 'DELETE',
+                data: removeFromToday,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                context: this,
+                success: function (data) {
+                    if(data == removeFromToday){
+                        $(this).parent().remove();
+                        $('input[value='+removeFromToday+']').prop('disabled', false);
+                        $('input[value='+removeFromToday+']').prop('checked', false);
+                    }
+                }
+            });
+        });
+
+    });
 </script>
 <body>
 <div class="container">
-    <hr class="my-4">
-    <div>
-        <ul class="list-unstyled ps-0" th:each="category : ${categories}">
-            <li th:if="${category.parent == null}" class="mb-1">
-<!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
-                <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                        th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
-                        th:onclick="'showSubCategories('+${category.id}+')'" aria-expanded="true">
-                        상위카테고리
-                </button>
-                <div class="collapse" th:id="'cate-collapse'+${category.id}" >
-<!--                <div class="collapse show" th:id="'cate-collapse'+${category.id}" >-->
-<!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ml-4">-->
-<!--                        <li>하위카테고리</li>-->
-<!--                    </ul>-->
-                    <!--/*-->
-                    <button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" data-bs-target="#sub-cate">
-                            하위카테고리
+    <div class="row">
+        <div class="col-5">
+            <hr class="my-4">
+            <ul class="list-unstyled ps-0" th:each="category : ${categories}">
+                <li th:if="${category.parent == null}" class="mb-1">
+    <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
+                    <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                            th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
+                            th:onclick="'showSubCategories('+${category.id}+')'" aria-expanded="true">
+                            상위카테고리
                     </button>
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4"><input type="checkbox" id="todo1" name="todo1" value="1">
-                        <label for="todo1"> 할일1</label>
-                    </ul>
+                    <div class="collapse" th:id="'cate-collapse'+${category.id}" >
+    <!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ml-4">-->
+    <!--                        <li>하위카테고리</li>-->
+    <!--                    </ul>-->
+                    </div>
+                    <!--/*-->
+                    <div class="collapse show" th:id="'cate-collapse'+${category.id}" >
+                        <button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" data-bs-target="#sub-cate">
+                            하위카테고리
+                        </button>
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4"><input type="checkbox" id="todo1" name="todo1" value="1">
+                            <label for="todo1"> 할일1</label>
+                        </ul>
+                    </div>
                     <!--*/-->
-                </div>
-            </li>
-        </ul>
+                </li>
+            </ul>
+            <button type="button" class="btn btn-primary px-3" onclick="location.href='/category'">카테고리 추가</button>
+            <button type="button" class="btn btn-primary px-3" onclick="location.href='/todo'">할일 추가</button>
+        </div>
+        <div class="col">
+            <hr class="my-4">
+            <button type="button" id="add" class="btn btn-info">추가</button>
+        </div>
+        <div class="col-6">
+            <hr class="my-4">
+            <span th:text="${#temporals.format(date, 'yyyy년 M월 d일')}">날짜</span>
+            <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
+            <div id="today">
+                <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 mb-0" th:each="todo : ${todayTodos}">
+                    <input type="checkbox" th:field="todayTodo+${todo.id}" th:value="${todo.id}">
+                    <label th:for="todayTodo+${todo.id}" th:text="${todo.name}"> </label>
+                    <i class="fa-regular fa-square-minus fa-xs today-minus"></i>
+                </ul>
+            </div>
+        </div>
     </div>
-
-    <button type="button" class="btn btn-primary px-3" onclick="location.href='/category'">카테고리 추가</button>
-    <button type="button" class="btn btn-primary px-3" onclick="location.href='/todo'">할일 추가</button>
 </div>
 <div id="text">
 </div>
