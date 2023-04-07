@@ -63,11 +63,20 @@ function getTodayTodoIds(){
     });
     console.log(todayTodoIds);
 }
+
 $(document).ready(function() {
     getTodayTodoIds();
     addTodayTodosListener();
     $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
-    // $('#today ul li:nth-child(1)').prepend('<i class="fas fa-check"></i>');
+
+
+    // $('#today ul div:nth-child(1)').find('i').before('<i class="fa-solid fa-1 fa-sm p1"></i>');
+    $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
+
+    // $('#todayList div').on('drop', function() {
+    //     console.log("111");
+    //     $("#todayList div:first-child").find('i').before('<i class="fa-solid fa-1 fa-sm" style="color: #e91c1c;"></i>');
+    // });
     $("#add").click(function() {  //추가
         var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
             return this.value;
@@ -148,11 +157,26 @@ $(document).ready(function() {
         let dropped = $(this).parent().children().eq(oldIndex).remove() //oldIndex인 요소 삭제
         console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex)
 
+        if(newIndex == 0) {
+            $('#todayList div:nth-child(1) i:last-child').remove();
+        }
+
         // insert the dropped items at new place
         if (newIndex < oldIndex) {
             target.before(dropped) //target 앞에 추가
         } else {
             target.after(dropped)
+        }
+        if(newIndex <= 2 || oldIndex <= 2){
+            $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
+            $('#today ul div').slice(3).css('border', '1px solid #ccc');
+        }
+        if(newIndex == 0 || oldIndex == 0) {
+            $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
+        }
+        if(oldIndex == 0){
+            let dragItemNewIndex = newIndex + 1;
+            $('#todayList div:nth-child('+dragItemNewIndex+') i:last-child').remove();
         }
     }
 

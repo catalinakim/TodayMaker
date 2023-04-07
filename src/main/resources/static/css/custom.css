@@ -89,3 +89,11 @@ ul.moveable div:hover{
 input[type=checkbox] {
     accent-color: #5D9C59;
 }
+
+.p1{
+    color: #e91c1c;
+    float:right;
+    /*display: block;*/
+    margin-top:10px;
+    margin-right: 10px;
+}

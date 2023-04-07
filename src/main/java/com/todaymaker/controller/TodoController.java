@@ -7,7 +7,6 @@ import com.todaymaker.dto.TodoCreateDto;
 import com.todaymaker.service.CategoryService;
 import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
