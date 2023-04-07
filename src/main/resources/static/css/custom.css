@@ -46,7 +46,8 @@
     background-color: #dedede;
 }
 /*추가*/
-.btn-toggle-nav li {
+.btn-toggle-nav li,
+.btn-toggle-nav div{
     padding: .1875rem .5rem;
     margin-top: .125rem;
     margin-left: 1.25rem;
@@ -56,5 +57,31 @@
     color: #a3a3a3;
     float:right;
     margin-top:10px;
-    margin-right: 10%;
+    margin-right: 5px;
+}
+/* drag and drop */
+[draggable=true] {
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+ul.moveable {
+    list-style: none;
+    margin: 0px;
+}
+ul.moveable li,
+ul.moveable div{
+    list-style-image: none;
+    margin: 10px;
+    border: 1px solid #ccc;
+    padding: 4px;
+    border-radius: 4px;
+    color: #666;
+    cursor: move;
+}
+ul.moveable li:hover,
+ul.moveable div:hover{
+    background-color: #eee;
 }
