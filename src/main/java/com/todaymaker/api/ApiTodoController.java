@@ -46,8 +46,8 @@ public class ApiTodoController {
     }
 
     @GetMapping("/todos/today")
-    public List<Optional<Todo>> getTodayTodo() {
-        List<Optional<Todo>> todayTodos = todoService.getTodayTodos();
+    public List<Todo> getTodayTodo() {
+        List<Todo> todayTodos = todoService.getTodayTodos();
 
         return todayTodos;
     }

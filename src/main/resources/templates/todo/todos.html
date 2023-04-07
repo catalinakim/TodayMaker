@@ -7,6 +7,7 @@
     <title>로컬 타이틀</title>
 </head>
 <script type="text/javascript">
+    let todayTodoIds = new Array();
     function showSubCategories(id) {
         var categoryId = id;
         var url = "/categories/"+categoryId+"/subcategories";
@@ -45,12 +46,14 @@
         })
         .done(function (data, textStatus, jqXHR) {
             const todos = data;
-
             for (let i = 0; i < todos.length; i++) {
-                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">' +
-                    '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '">\n' +
-                    '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label><br>' +
-                    '</ul>';
+                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">';
+                if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
+                    subhtml += '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
+                }else{
+                    subhtml += '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
+                }
+                subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label><br> </ul>';
                 $("#cate-collapse"+categoryId).append(subhtml);
             }
             console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
@@ -61,12 +64,20 @@
                 .append("상태: " + textStatus);
         });
     }
+    function getTodayTodoIds(){
+        $('#today input[type="checkbox"]').each(function() {
+            let todoId = $(this).val();
+            todayTodoIds.push(todoId);
+            // $('#todoArea #todo'+todoId).prop('disabled', true);
+        });
+        console.log(todayTodoIds);
+    }
     $(document).ready(function() {
-        $("#add").click(function() {
+        getTodayTodoIds();
+        $("#add").click(function() {  //추가
             var checkedTodos = $('input[type=checkbox]:checked').map(function() {
                 return this.value;
             }).get();
-            console.log(checkedTodos);
             $.ajax({
                 url: '/todos/today',
                 type: 'POST',
@@ -86,7 +97,7 @@
             });
             $('input[type=checkbox]:checked').prop('disabled', true);
         });
-        $(document).on("click", "i", function(){
+        $(document).on("click", "i", function(){  //-버튼 클릭시
             console.log("i tag");
             var removeFromToday = $(this).prev().prev().val();
             console.log(removeFromToday);
@@ -106,13 +117,12 @@
                 }
             });
         });
-
     });
 </script>
 <body>
 <div class="container">
     <div class="row">
-        <div class="col-5">
+        <div class="col-5" id="todoArea">
             <hr class="my-4">
             <ul class="list-unstyled ps-0" th:each="category : ${categories}">
                 <li th:if="${category.parent == null}" class="mb-1">
@@ -123,9 +133,6 @@
                             상위카테고리
                     </button>
                     <div class="collapse" th:id="'cate-collapse'+${category.id}" >
-    <!--                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ml-4">-->
-    <!--                        <li>하위카테고리</li>-->
-    <!--                    </ul>-->
                     </div>
                     <!--/*-->
                     <div class="collapse show" th:id="'cate-collapse'+${category.id}" >
@@ -152,8 +159,8 @@
             <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
             <div id="today">
                 <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 mb-0" th:each="todo : ${todayTodos}">
-                    <input type="checkbox" th:field="todayTodo+${todo.id}" th:value="${todo.id}">
-                    <label th:for="todayTodo+${todo.id}" th:text="${todo.name}"> </label>
+                    <input type="checkbox" th:id="'todayTodo' + ${todo.id}" th:value="${todo.id}">
+                    <label th:for="todayTodb+${todo.id}" th:text="${todo.name}"> </label>
                     <i class="fa-regular fa-square-minus fa-xs today-minus"></i>
                 </ul>
             </div>

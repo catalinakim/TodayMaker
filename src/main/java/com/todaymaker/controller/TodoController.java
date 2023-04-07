@@ -71,7 +71,7 @@ public class TodoController {
         List<Todo> todos = todoService.findTodos();
         model.addAttribute("todos", todos);
 
-        List<Optional<Todo>> todayTodos = todoService.getTodayTodos();
+        List<Todo> todayTodos = todoService.getTodayTodos();
         model.addAttribute("todayTodos", todayTodos);
 
         return "todo/todos";
