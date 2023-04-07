@@ -66,10 +66,10 @@ function getTodayTodoIds(){
 $(document).ready(function() {
     getTodayTodoIds();
     addTodayTodosListener();
-    $('#today ul li').slice(0,3).css('border', '1px solid #f0a591');
+    $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
     // $('#today ul li:nth-child(1)').prepend('<i class="fas fa-check"></i>');
     $("#add").click(function() {  //추가
-        var checkedTodos = $('input[type=checkbox]:checked').map(function() {
+        var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
             return this.value;
         }).get();
         $.ajax({
@@ -94,6 +94,7 @@ $(document).ready(function() {
     });
     $(document).on("click", ".today-minus", function(){  //i태그 - 버튼 클릭시
         var removeFromToday = $(this).prev().prev().val();
+        console.log("삭제 클릭한 것: " + $(this).prev().text());
         $.ajax({
             url: '/todos/today',
             type: 'DELETE',
@@ -124,7 +125,7 @@ $(document).ready(function() {
     }
 
     function dragStart (e) {
-        var index = $(e.target).index()
+        var index = $(e.target).index()  //클릭한 요소의 인덱스
         e.dataTransfer.setData('text/plain', index)
     }
 
@@ -132,17 +133,24 @@ $(document).ready(function() {
         cancelDefault(e)
 
         // get new and old index
-        let oldIndex = e.dataTransfer.getData('text/plain')
-        let target = $(e.target)
+        let oldIndex = e.dataTransfer.getData('text/plain') //드래그앤드롭으로 이동한 데이터
+        // let target = $(e.target)  //이벤트가 발생한 요소(drop한 곳에 위치한 객체)
+        let target;
+        if ($(e.target).is('div')) {
+            target = $(e.target);
+        }else{
+            target = $(e.target).parent();
+        }
+        console.log(target);
         let newIndex = target.index()
 
         // remove dropped items at old place
-        let dropped = $(this).parent().children().eq(oldIndex).remove()
+        let dropped = $(this).parent().children().eq(oldIndex).remove() //oldIndex인 요소 삭제
         console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex)
 
         // insert the dropped items at new place
         if (newIndex < oldIndex) {
-            target.before(dropped)
+            target.before(dropped) //target 앞에 추가
         } else {
             target.after(dropped)
         }

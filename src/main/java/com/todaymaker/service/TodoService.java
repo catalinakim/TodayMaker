@@ -47,17 +47,17 @@ public class TodoService {
     @Transactional
     public List<Todo> saveTodoToday(List<Long> todoIds) {
         List<DailyPlan> todosToday = new ArrayList<>();
-        List<Todo> todayTodos = new ArrayList<>();
+        List<Todo> todos = new ArrayList<>();
         for (Long todoId : todoIds) {
             DailyPlan dailyPlan = new DailyPlan();
             dailyPlan.setDay(LocalDate.now());
             dailyPlan.setTodoId(todoId);
             todosToday.add(dailyPlan);
             Todo todo = todoRepository.findById(todoId).get();
-            todayTodos.add(todo);
+            todos.add(todo);
         }
         List<DailyPlan> savedTodos = dailyPlanRepository.saveAll(todosToday);
-        return todayTodos;
+        return todos;
     }
     @Transactional
     public void removeFromToday(Long todoId) {

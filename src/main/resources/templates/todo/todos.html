@@ -49,11 +49,18 @@
             <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
             <div id="today">
                 <ul id="todayList" class="btn-toggle-nav list-unstyled fw-normal moveable" >
-                    <div th:each="todo : ${todayTodos}">
+                    <div th:each="todo : ${todayTodos}" >
                         <input type="checkbox" th:id="'todayTodo' + ${todo.id}" th:value="${todo.id}">
-                        <label th:for="todayTodb+${todo.id}" th:text="${todo.name}"> </label>
+                        <label th:for="todayTodo+${todo.id}" th:text="${todo.name}">할일</label>
                         <i class="fa-regular fa-square-minus fa-sm today-minus"></i>
                     </div>
+                    <!--/*-->
+                    <div draggable="true" style="border: 1px solid rgb(240, 165, 145);">
+                        <input type="checkbox" id="todayTodo3" value="3">
+                        <label for="todayTodo3">오늘 할일1</label>
+                        <i class="fa-regular fa-square-minus fa-sm today-minus"></i>
+                    </div>
+                    <!--*/-->
                 </ul>
             </div>
         </div>
