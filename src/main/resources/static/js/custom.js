@@ -1,26 +1,25 @@
 let todayTodoIds = new Array();
-function showSubCategories(id) {
-    var categoryId = id;
-    var url = "/categories/"+categoryId+"/subcategories";
-    $.ajax({
-        url: url,
-        type:"GET"
-        // cache: false
-    })
+
+function showSubCategories(e) {
+    console.log(Object.keys(getSubCategories));
+    console.log(Object.values(getSubCategories));
+    var categoryId = $(e).val();
+    if($(e).attr('aria-expanded')=="true" && getSubCategories[categoryId]==false){
+        var url = "/categories/"+categoryId+"/subcategories";
+        $.ajax({
+            url: url,
+            type:"GET",
+            cache: false
+        })
         .done(function (data, textStatus, jqXHR) {
             const subCateArr = data;
-
             for (let i = 0; i < subCateArr.length; i++) {
-                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1">'
-                    + '<li onclick="showTodos(' + subCateArr[i]["id"]+ ')" class="link-dark rounded">' + subCateArr[i]["name"] + '</li>'
-                    + '</ul>';
-                let subhtmlBtn = '<button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" '
+                let subhtml = '<button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" '
                     + 'data-bs-target="#sub-cate' + subCateArr[i]["id"]+ '"> ' + subCateArr[i]["name"] + '</button>'
                     + '<div class="collapse" id="sub-cate' + subCateArr[i]["id"]+ '"> </div>';
-                // $("#cate-collapse"+id).append(subhtmlBtn);
-                $("#cate-collapse"+id).html(subhtmlBtn);
-                console.log(subCateArr[i]["name"]);
+                $("#cate-collapse"+id).html(subhtml);
             }
+            getSubCategories[categoryId] = true;
             getTodos(categoryId);
         })
         .fail(function(xhr, textStatus, errorThrown) {
@@ -28,6 +27,7 @@ function showSubCategories(id) {
                 .append("오류명: " + errorThrown + "<br>")
                 .append("상태: " + textStatus);
         });
+    }
 }
 function getTodos(categoryId){
     var url = "/categories/"+categoryId+"/todos";
@@ -65,6 +65,7 @@ function getTodayTodoIds(){
 }
 
 $(document).ready(function() {
+
     getTodayTodoIds();
     addTodayTodosListener();
     $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');

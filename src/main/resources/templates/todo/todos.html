@@ -6,7 +6,12 @@
     <link href="/static/css/custom.css" rel="stylesheet">
     <title>로컬 타이틀</title>
 </head>
-<script type="text/javascript">
+<script th:inline="javascript">
+    let getSubCategories = {};
+    /*[# th:each="cate : ${categories}"]*/
+        var key = /*[[${cate.id}]]*/;
+        getSubCategories[key] = false;
+    /*[/]*/
 </script>
 
 <body>
@@ -19,7 +24,7 @@
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
                     <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                             th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
-                            th:onclick="'showSubCategories('+${category.id}+')'" aria-expanded="true">
+                            th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
                             상위카테고리
                     </button>
                     <div class="collapse" th:id="'cate-collapse'+${category.id}" >
@@ -58,8 +63,8 @@
                     <div draggable="true" style="border: 1px solid rgb(240, 165, 145);">
                         <input type="checkbox" id="todayTodo3" value="3">
                         <label for="todayTodo3">오늘 할일1</label>
-                        <i class="fa-regular fa-square-minus fa-sm today-minus">○</i>
-                        <i class="fa-solid fa-1 fa-sm p1">☆</i>
+                        <i class="fa-regular fa-square-minus fa-sm today-minus">□</i>
+                        <i class="fa-solid fa-1 fa-sm p1">１</i>
                     </div>
                     <!--*/-->
                 </ul>
