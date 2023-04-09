@@ -114,3 +114,7 @@ label {
     padding-left: 3px;
     padding-right: 3px;
 }
+.field-error {
+    border-color: #dc3545;
+    color: #dc3545;
+}

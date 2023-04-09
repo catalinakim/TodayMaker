@@ -24,6 +24,9 @@
         <label for="name">카테고리 이름</label>
         <input type="text" th:field="*{name}" class="form-control" id="name"
                placeholder="생성할 카테고리 이름을 입력하세요">
+        <div class="field-error" th:errors="*{name}">
+            카테고리명 오류
+        </div>
     </div>
     <br>
     <p>* 상위 카테고리가 "선택안함" 이면, 상위 카테고리를 생성합니다.</p>
