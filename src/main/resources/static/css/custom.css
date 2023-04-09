@@ -97,3 +97,13 @@ input[type=checkbox] {
     margin-top:10px;
     margin-right: 10px;
 }
+.edit {
+    color: #a3a3a3;
+    float:right;
+    margin-top:10px;
+    margin-right: 10px;
+}
+label {
+    padding-left: 3px;
+    padding-right: 3px;
+}

@@ -27,4 +27,8 @@ public class TodoJpaRepository {
     public List<Todo> findAll() {
         return em.createQuery("select t from Todo t", Todo.class).getResultList();
     }
+
+    public Todo findOne(Long id){
+        return em.find(Todo.class, id);
+    }
 }

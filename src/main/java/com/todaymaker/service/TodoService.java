@@ -82,4 +82,9 @@ public class TodoService {
         }
         return todayTodos;
     }
+    @Transactional
+    public void update(Long id, String name) {
+        Todo todo = todoJpaRepository.findOne(id);
+        todo.setName(name);
+    }
 }

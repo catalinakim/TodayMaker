@@ -52,10 +52,21 @@ public class ApiTodoController {
         return todayTodos;
     }
 
+    @PutMapping("/todos/{id}")
+    public void editTodo(@PathVariable Long id, @RequestBody UpdateTodoDto dto){
+        todoService.update(id, dto.getName());
+        return;
+    }
+
     @Data
     @AllArgsConstructor
     static class TodoDto {
         private Long id;
+        private String name;
+    }
+
+    @Data
+    static class UpdateTodoDto {
         private String name;
     }
 }

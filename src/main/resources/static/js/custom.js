@@ -44,7 +44,8 @@ function getTodos(categoryId){
                 }else{
                     subhtml += '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
                 }
-                subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label><br> </ul>';
+                subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
+                    + '<i class="fa-regular fa-pen-to-square fa-sm edit"></i> </ul>';
                 $("#cate-collapse"+categoryId).append(subhtml);
             }
             console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
@@ -71,13 +72,8 @@ $(document).ready(function() {
     $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
 
 
-    // $('#today ul div:nth-child(1)').find('i').before('<i class="fa-solid fa-1 fa-sm p1"></i>');
     $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
 
-    // $('#todayList div').on('drop', function() {
-    //     console.log("111");
-    //     $("#todayList div:first-child").find('i').before('<i class="fa-solid fa-1 fa-sm" style="color: #e91c1c;"></i>');
-    // });
     $("#add").click(function() {  //추가
         var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
             return this.value;
@@ -186,4 +182,35 @@ $(document).ready(function() {
         e.stopPropagation()
         return false
     }
+
+    $(document).on('click', 'i.edit', function() {
+        $(this).siblings('label').hide();
+        if ($(this).prev('input[type="text"]').length) {
+            $(this).prev('input[type="text"]').show();
+            $(this).prev('input').focus();
+        } else {
+            var text = $(this).prev('label').text();
+            $(this).before('<input type="text" value="'+text+'" />');
+            $(this).prev('input').focus();
+            $(this).prev('input').val('').val(text);
+        }
+    });
+
+    $(document).on('blur', 'input:text', function(e) {
+        $(this).prev('label').text($(this).val());
+        $(this).prev('label').show();
+        $(this).hide();
+        var text = $(this).val();
+        var id = $(this).siblings('input:checkbox').val();
+        $.ajax({
+            url: '/todos/'+id,
+            type: 'PUT',
+            data: JSON.stringify({name: text}),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(response) {
+                console.log(response);
+            }
+        });
+    });
 });
