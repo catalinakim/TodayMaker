@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,12 +38,18 @@ public class CategoryController {
     @PostMapping("/category")
     public String addCategory(@ModelAttribute Category category, BindingResult bindingResult) {
         //카테고리명 중복 불가
+        if(!StringUtils.hasText(category.getName())){
+            bindingResult.addError(new FieldError("category","name","카테고리명 공백 불가"));
+        }
         if(categoryService.checkName(category.getName()) != null){
             bindingResult.addError(new FieldError("category", "name", category.getName(),false,null,null, "카테고리명 중복"));
         }
+        if(bindingResult.hasErrors()){
+            return "category/categoryForm";
+        }
+
         //상위 카테고리는 null이어도 됨, 근데 에러는 안나야함
         if (category.getParent().getId() == null) {
-            System.out.println("부모카테고리 null");
             //bindingResult.addError(new FieldError("category", "parent.id", "상위카테고리를 선택하지 않음"));
             category.setParentNull();
             categoryService.saveCategory(category);
@@ -50,9 +57,6 @@ public class CategoryController {
             categoryService.saveCategory(category);
         }
 
-        if(bindingResult.hasErrors()){
-            return "category/categoryForm";
-        }
 
         return "redirect:/todos";
     }
