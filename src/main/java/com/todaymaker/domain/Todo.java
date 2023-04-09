@@ -31,11 +31,6 @@ public class Todo {
 
     private String name;
 
-    //public Todo(User user, Category category) {
-    //    this.user = user;
-    //    this.category = category;
-    //}
-
     //==연관관계 메서드==//
     public void setUser(User user) {
         this.user = user;
@@ -55,5 +50,6 @@ public class Todo {
         todo.setName(name);
         return todo;
     }
+
 
 }

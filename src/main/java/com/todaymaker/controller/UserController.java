@@ -2,7 +2,7 @@ package com.todaymaker.controller;
 
 import com.todaymaker.domain.User;
 import com.todaymaker.dto.UserDto;
-import com.todaymaker.repository.UserRepository;
+import com.todaymaker.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
     //로그인 페이지
     @GetMapping("/login")
@@ -39,7 +39,7 @@ public class UserController {
         user.initUser();
         log.info(String.valueOf(user.getJoinType()));
         log.info(user.getCreatedAt());
-        User savedUser = userRepository.save(user);
+        User savedUser = userJpaRepository.save(user);
         log.info(Long.toString(savedUser.getId()));
         return "user/login";
     }

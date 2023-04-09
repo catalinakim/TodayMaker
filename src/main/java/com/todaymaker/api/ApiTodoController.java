@@ -58,6 +58,17 @@ public class ApiTodoController {
         return;
     }
 
+    @DeleteMapping("/todos")
+    public Long deleteTodo(@RequestBody TodoDto todo){
+        todoService.deleteTodo(todo.getId());
+        return todo.getId();
+    }
+
+    @PostMapping("/todos")
+    public Todo addTodo(@RequestBody CreateTodoDto dto){
+        return todoService.addTodo(dto);
+    }
+
     @Data
     @AllArgsConstructor
     static class TodoDto {
@@ -67,6 +78,14 @@ public class ApiTodoController {
 
     @Data
     static class UpdateTodoDto {
+        private String name;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CreateTodoDto {
+        private Long userId;
+        private Long categoryId;
         private String name;
     }
 }

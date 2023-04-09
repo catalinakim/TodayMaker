@@ -59,6 +59,13 @@
     margin-top:10px;
     margin-right: 5px;
 }
+
+.del {
+    color: #a3a3a3;
+    float:right;
+    margin-top:10px;
+    margin-right: 5px;
+}
 /* drag and drop */
 [draggable=true] {
     user-select: none;

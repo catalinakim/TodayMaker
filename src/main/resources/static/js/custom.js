@@ -35,42 +35,40 @@ function getTodos(categoryId){
         url: url,
         type:"GET"
     })
-        .done(function (data, textStatus, jqXHR) {
-            const todos = data;
-            for (let i = 0; i < todos.length; i++) {
-                let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">';
-                if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
-                    subhtml += '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
-                }else{
-                    subhtml += '<input type="checkbox" id="todo' + todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
-                }
-                subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
-                    + '<i class="fa-regular fa-pen-to-square fa-sm edit"></i> </ul>';
-                $("#cate-collapse"+categoryId).append(subhtml);
+    .done(function (data, textStatus, jqXHR) {
+        const todos = data;
+        for (let i = 0; i < todos.length; i++) {
+            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">';
+            if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
+                subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
+            }else{
+                subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
             }
-            console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
-        })
-        .fail(function(xhr, textStatus, errorThrown) {
-            $("#text").html("할일을 불러오는데 오류 발생<br>")
-                .append("오류명: " + errorThrown + "<br>")
-                .append("상태: " + textStatus);
-        });
+            subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
+                + '<i class="fa-regular fa-trash-can fa-sm del"></i>'
+                + '<i class="fa-regular fa-pen-to-square fa-sm edit"></i> </ul>';
+            $("#cate-collapse"+categoryId).append(subhtml);
+        }
+        console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
+    })
+    .fail(function(xhr, textStatus, errorThrown) {
+        $("#text").html("할일을 불러오는데 오류 발생<br>")
+            .append("오류명: " + errorThrown + "<br>")
+            .append("상태: " + textStatus);
+    });
 }
 function getTodayTodoIds(){
     $('#today input[type="checkbox"]').each(function() {
         let todoId = $(this).val();
         todayTodoIds.push(todoId);
-        // $('#todoArea #todo'+todoId).prop('disabled', true);
     });
-    console.log(todayTodoIds);
 }
 
 $(document).ready(function() {
-
     getTodayTodoIds();
     addTodayTodosListener();
-    $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
 
+    $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
 
     $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
 
@@ -164,14 +162,14 @@ $(document).ready(function() {
         } else {
             target.after(dropped)
         }
-        if(newIndex <= 2 || oldIndex <= 2){
+        if(newIndex <= 2 || oldIndex <= 2){  //3순위 이하꺼를 옮기거나, 3순위 이하로 옮겨지면
             $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
             $('#today ul div').slice(3).css('border', '1px solid #ccc');
         }
-        if(newIndex == 0 || oldIndex == 0) {
+        if(newIndex == 0) {  //새 위치가 0이면
             $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
         }
-        if(oldIndex == 0){
+        if(oldIndex == 0){  //기존 위치가 0이면
             let dragItemNewIndex = newIndex + 1;
             $('#todayList div:nth-child('+dragItemNewIndex+') i:last-child').remove();
         }
@@ -212,5 +210,21 @@ $(document).ready(function() {
                 console.log(response);
             }
         });
+    });
+    $(document).on('click','i.del',function (){
+        var id = $(this).siblings('input:checkbox').attr('id');
+        var parent = $(this).parent();
+        $.ajax({
+            url: '/todos',
+            type: 'DELETE',
+            data: JSON.stringify({id: id}),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(data) {
+                if(data == id){
+                    parent.remove();
+                }
+            }
+        })
     });
 });

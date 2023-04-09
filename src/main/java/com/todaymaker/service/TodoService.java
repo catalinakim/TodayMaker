@@ -4,10 +4,8 @@ import com.todaymaker.api.ApiTodoController;
 import com.todaymaker.domain.Category;
 import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
-import com.todaymaker.repository.CategoryRepository;
-import com.todaymaker.repository.DailyPlanRepository;
-import com.todaymaker.repository.TodoJpaRepository;
-import com.todaymaker.repository.TodoRepository;
+import com.todaymaker.domain.User;
+import com.todaymaker.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,7 @@ public class TodoService {
     private final TodoRepository todoRepository;
     private final CategoryRepository categoryRepository;
     private final DailyPlanRepository dailyPlanRepository;
+    private final UserJpaRepository userJpaRepository;
 
     @Transactional
     public void saveTodo(Todo todo) {
@@ -86,5 +85,16 @@ public class TodoService {
     public void update(Long id, String name) {
         Todo todo = todoJpaRepository.findOne(id);
         todo.setName(name);
+    }
+    @Transactional
+    public void deleteTodo(Long id) {
+        todoRepository.deleteById(id);
+    }
+    @Transactional
+    public Todo addTodo(ApiTodoController.CreateTodoDto dto) {
+        User user = userJpaRepository.findOne(dto.getUserId());
+        Category category = categoryRepository.findById(dto.getCategoryId()).get();
+        Todo todo = Todo.createTodo(user, category, dto.getName());
+        return todoRepository.save(todo);
     }
 }

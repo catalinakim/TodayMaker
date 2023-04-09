@@ -4,7 +4,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link href="/static/css/bootstrap.min.css" rel="stylesheet">
     <link href="/static/css/custom.css" rel="stylesheet">
-    <title>로컬 타이틀</title>
+    <title>To do(Local)</title>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <script th:inline="javascript">
     let getSubCategories = {};
@@ -13,8 +14,15 @@
         getSubCategories[key] = false;
     /*[/]*/
 </script>
-
+<!--/*-->
+<script type="text/javascript">
+    $(document).ready(function(){
+         $("#header").load("../fragments/header.html");
+    });
+</script><!--*/-->
 <body>
+<header id="header">
+</header>
 <div class="container">
     <div class="row">
         <div class="col-5" id="todoArea">
@@ -36,6 +44,8 @@
                         </button>
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4"><input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1"> 할일1</label>
+                            <i class="fa-regular fa-trash-can fa-sm del"></i>
+                            <i class="fa-regular fa-pen-to-square fa-sm edit"></i>
                         </ul>
                     </div>
                     <!--*/-->
@@ -63,8 +73,7 @@
                     <div draggable="true" style="border: 1px solid rgb(240, 165, 145);">
                         <input type="checkbox" id="todayTodo3" value="3">
                         <label for="todayTodo3">오늘 할일1</label>
-                        <i class="fa-regular fa-square-minus fa-sm today-minus">□</i>
-                        <i class="fa-solid fa-1 fa-sm p1">１</i>
+                        <i class="fa-regular fa-square-minus fa-sm today-minus"></i>
                     </div>
                     <!--*/-->
                 </ul>
@@ -77,6 +86,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/js/custom.js"></script>
+<script type="text/javascript" th:src="@{/js/custom.js}" src="../../static/js/custom.js"></script>
 </body>
 </html>
