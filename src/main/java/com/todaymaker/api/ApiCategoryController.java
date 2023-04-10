@@ -6,6 +6,7 @@ import com.todaymaker.repository.CategoryJpaRepository;
 import com.todaymaker.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,6 +39,12 @@ public class ApiCategoryController {
                 .map(c -> new CategoryDto(c))
                 .collect(toList());
         return result;
+    }
+
+    @DeleteMapping("/categories/{id}")
+    public Long delCategory(@PathVariable Long id){
+        Long delId = categoryService.deleteWithSubCategory(id);
+        return delId;
     }
 
 

@@ -2,8 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-    <link href="/static/css/custom.css" rel="stylesheet">
     <title>To do(Local)</title>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
@@ -28,13 +26,14 @@
         <div class="col-5" id="todoArea">
             <hr class="my-4">
             <ul class="list-unstyled ps-0" th:each="category : ${categories}">
-                <li th:if="${category.parent == null}" class="mb-1">
+                <li th:if="${category.parent == null}">
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
                     <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
                             th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
                             th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
                             상위카테고리
                     </button>
+                    <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
                     <div class="collapse" th:id="'cate-collapse'+${category.id}" >
                     </div>
                     <!--/*-->

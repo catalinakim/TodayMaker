@@ -9,5 +9,5 @@ import java.util.List;
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
     List<Todo> findByCategory(Category category);
-    //List<Todo> findByCategoryId(Long id);
+    List<Todo> findByCategoryId(Long id);
 }

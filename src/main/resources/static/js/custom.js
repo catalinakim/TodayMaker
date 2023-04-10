@@ -3,9 +3,9 @@ let todayTodoIds = new Array();
 function showSubCategories(e) {
     console.log(Object.keys(getSubCategories));
     console.log(Object.values(getSubCategories));
-    var categoryId = $(e).val();
-    if($(e).attr('aria-expanded')=="true" && getSubCategories[categoryId]==false){
-        var url = "/categories/"+categoryId+"/subcategories";
+    var id = $(e).val();
+    if($(e).attr('aria-expanded')=="true" && getSubCategories[id]==false){
+        var url = "/categories/"+id+"/subcategories";
         $.ajax({
             url: url,
             type:"GET",
@@ -19,8 +19,8 @@ function showSubCategories(e) {
                     + '<div class="collapse" id="sub-cate' + subCateArr[i]["id"]+ '"> </div>';
                 $("#cate-collapse"+id).html(subhtml);
             }
-            getSubCategories[categoryId] = true;
-            getTodos(categoryId);
+            getSubCategories[id] = true;
+            getTodos(id);
         })
         .fail(function(xhr, textStatus, errorThrown) {
             $("#text").html("오류 발생.<br>")
@@ -181,7 +181,7 @@ $(document).ready(function() {
         return false
     }
 
-    $(document).on('click', 'i.edit', function() {
+    $(document).on('click', 'i.edit', function() { //할일삭제
         $(this).siblings('label').hide();
         if ($(this).prev('input[type="text"]').length) {
             $(this).prev('input[type="text"]').show();
@@ -211,7 +211,7 @@ $(document).ready(function() {
             }
         });
     });
-    $(document).on('click','i.del',function (){
+    $(document).on('click','i.del',function (){ //할일 삭제
         var id = $(this).siblings('input:checkbox').attr('id');
         var parent = $(this).parent();
         $.ajax({
@@ -220,6 +220,19 @@ $(document).ready(function() {
             data: JSON.stringify({id: id}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
+            success: function(data) {
+                if(data == id){
+                    parent.remove();
+                }
+            }
+        })
+    });
+    $(document).on('click','i.cate-del',function (){ //카테고리 삭제
+        var id = $(this).siblings('button').val();
+        var parent = $(this).parent();
+        $.ajax({
+            url: '/categories/'+id,
+            type: 'DELETE',
             success: function(data) {
                 if(data == id){
                     parent.remove();
