@@ -37,8 +37,25 @@ public class CategoryService {
     public Category checkName(String name) {
         return categoryRepository.findByName(name);
     }
+
     @Transactional
     public Long deleteWithSubCategory(Long id) {
+        Optional<Category> category = categoryRepository.findById(id);
+        category.ifPresent(category1 -> {
+            for(Todo todo : category1.getTodos()){
+                todo.setCategoryNull();
+            }
+            //하위카테고리삭제
+            for(Category child : category1.getChild()){
+                child.setParentNull();
+                categoryRepository.deleteById(child.getId());
+            }
+            categoryRepository.deleteById(id);
+        });
+        return id;
+    }
+    @Transactional
+    public Long deleteWithoutDelSubCategory(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         category.ifPresent(category1 -> {
             for(Todo todo : category1.getTodos()){

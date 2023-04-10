@@ -43,8 +43,8 @@
                         </button>
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4"><input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1"> 할일1</label>
-                            <i class="fa-regular fa-trash-can fa-sm del"></i>
-                            <i class="fa-regular fa-pen-to-square fa-sm edit"></i>
+                            <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                            <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
                     </div>
                     <!--*/-->
@@ -66,13 +66,18 @@
                     <div th:each="todo : ${todayTodos}" >
                         <input type="checkbox" th:id="'todayTodo' + ${todo.id}" th:value="${todo.id}">
                         <label th:for="todayTodo+${todo.id}" th:text="${todo.name}">할일</label>
-                        <i class="fa-regular fa-square-minus fa-sm today-minus"></i>
+                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
+                        <i class="fa-regular fa-star fa-sm i star"></i>
                     </div>
                     <!--/*-->
                     <div draggable="true" style="border: 1px solid rgb(240, 165, 145);">
                         <input type="checkbox" id="todayTodo3" value="3">
                         <label for="todayTodo3">오늘 할일1</label>
-                        <i class="fa-regular fa-square-minus fa-sm today-minus"></i>
+                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
+                        <i class="fa-regular fa-star fa-sm i star"></i>
+                        <a class="btn btn-danger pa1">
+                            <i class="fa-solid fa-1 fa-xs" aria-hidden="true"></i>
+                        </a>
                     </div>
                     <!--*/-->
                 </ul>

@@ -45,26 +45,18 @@
 .btn-toggle-nav a:focus {
     background-color: #dedede;
 }
-/*추가*/
-.btn-toggle-nav li,
-.btn-toggle-nav div{
-    padding: .1875rem .5rem;
-    margin-top: .125rem;
-    margin-left: 1.25rem;
-}
-
-.today-minus {
+/* 추가 */
+.i {
+    float: right;
     color: #a3a3a3;
-    float:right;
     margin-top:12px;
     margin-right: 5px;
 }
-
-.del {
-    color: #a3a3a3;
-    float:right;
-    margin-top:10px;
-    margin-right: 5px;
+.star:hover{
+    cursor: default;
+}
+.star-on {
+    color: #e1b500;
 }
 .cate-del {
     color: #c0c0c0;
@@ -77,7 +69,6 @@
     -webkit-user-select: none;
     -ms-user-select: none;
 }
-
 ul.moveable {
     list-style: none;
     margin: 0px;
@@ -104,14 +95,15 @@ input[type=checkbox] {
 .p1{
     color: #e91c1c;
     float:right;
-    /*display: block;*/
     margin-top:10px;
     margin-right: 10px;
 }
+.pa1{
+    padding: 8px 5px;
+    cursor: default;
+    border-radius: 30%;
+}
 .edit {
-    color: #a3a3a3;
-    float:right;
-    margin-top:10px;
     margin-right: 10px;
 }
 label {

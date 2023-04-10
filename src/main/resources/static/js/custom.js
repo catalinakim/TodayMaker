@@ -45,8 +45,8 @@ function getTodos(categoryId){
                 subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
             }
             subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
-                + '<i class="fa-regular fa-trash-can fa-sm del"></i>'
-                + '<i class="fa-regular fa-pen-to-square fa-sm edit"></i> </ul>';
+                + '<i class="fa-regular fa-trash-can fa-sm i del"></i>'
+                + '<i class="fa-regular fa-pen-to-square fa-sm i edit"></i> </ul>';
             $("#cate-collapse"+categoryId).append(subhtml);
         }
         console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
@@ -88,7 +88,8 @@ $(document).ready(function() {
                     let subhtml = '<div>' +
                         '<input type="checkbox" id="todayTodo' + todo[i]["id"]+ '" name="todayTodo' + todo[i]["id"]+ '" value="' + todo[i]["id"]+ '">\n' +
                         '<label for="todayTodo' + todo[i]["id"]+ '"> ' + todo[i]["name"]+ '</label>' +
-                        '<i class="fa-regular fa-square-minus fa-sm today-minus" ></i> </div>';
+                        '<i class="fa-regular fa-square-minus fa-sm i today-minus" ></i> ' +
+                        '<i class="fa-regular fa-star fa-sm i star"></i> </div>';
                     $("#todayList").append(subhtml);
                 }
                 addTodayTodosListener();
@@ -162,16 +163,18 @@ $(document).ready(function() {
         } else {
             target.after(dropped)
         }
+
+        //3순위 border 컬러 갱신
         if(newIndex <= 2 || oldIndex <= 2){  //3순위 이하꺼를 옮기거나, 3순위 이하로 옮겨지면
             $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
             $('#today ul div').slice(3).css('border', '1px solid #ccc');
         }
-        if(newIndex == 0) {  //새 위치가 0이면
+        if(newIndex == 0 || oldIndex == 0) {  //0위치가 변경됬으면
             $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
         }
         if(oldIndex == 0){  //기존 위치가 0이면
-            let dragItemNewIndex = newIndex + 1;
-            $('#todayList div:nth-child('+dragItemNewIndex+') i:last-child').remove();
+            let todoNewIndex = newIndex + 1;
+            $('#todayList div:nth-child('+todoNewIndex+') i:last-child').remove();
         }
     }
 
@@ -239,5 +242,16 @@ $(document).ready(function() {
                 }
             }
         })
+    });
+    $(document).on('click','i.star',function (){
+        if($(this).hasClass('star-on')) {
+            $( this ).removeClass( "star-on fa-solid" );
+            $( this ).addClass( "fa-regular" );
+            //중요 ajax로 저장
+        } else {
+            $( this ).removeClass( "fa-regular" );
+            $( this ).addClass( "star-on fa-solid" );
+            //중요해제 ajax
+        }
     });
 });
