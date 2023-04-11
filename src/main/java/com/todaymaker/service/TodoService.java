@@ -90,6 +90,7 @@ public class TodoService {
     }
     @Transactional
     public void deleteTodo(Long id) {
+        dailyPlanRepository.deleteByTodoId(id);
         todoRepository.deleteById(id);
     }
     @Transactional

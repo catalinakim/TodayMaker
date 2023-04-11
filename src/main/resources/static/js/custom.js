@@ -235,6 +235,7 @@ $(document).ready(function() {
             success: function(data) {
                 if(data == id){
                     parent.remove();
+                    $("#today input[type='checkbox'][value="+id+"]").parent().remove();
                 }
             }
         })
