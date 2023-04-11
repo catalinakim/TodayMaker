@@ -195,20 +195,20 @@ $(document).ready(function() {
 
     $(document).on('click', 'i.edit', function() { //할일수정
         $(this).siblings('label').hide();
-        if ($(this).prev('input[type="text"]').length) {
-            $(this).prev('input[type="text"]').show();
-            $(this).prev('input').focus();
+        if ($(this).siblings('input[type="text"]').length) {
+            $(this).siblings('input[type="text"]').show();
+            $(this).siblings('input:text').focus();
         } else {
-            var text = $(this).prev('label').text();
+            var text = $(this).siblings('label').text();
             $(this).before('<input type="text" value="'+text+'" />');
-            $(this).prev('input').focus();
-            $(this).prev('input').val('').val(text);
+            $(this).siblings('input:text').focus();
+            $(this).siblings('input:text').val('').val(text);
         }
     });
 
     $(document).on('blur', 'input:text', function(e) {
-        $(this).prev('label').text($(this).val());
-        $(this).prev('label').show();
+        $(this).siblings('label').text($(this).val());
+        $(this).siblings('label').show();
         $(this).hide();
         var text = $(this).val();
         var id = $(this).siblings('input:checkbox').val();
@@ -218,8 +218,11 @@ $(document).ready(function() {
             data: JSON.stringify({name: text}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
-            success: function(response) {
-                console.log(response);
+            success: function(res) {
+                if(id == res){
+                    $("#info").fadeIn();
+                    $("#info").fadeOut();
+                }
             }
         });
     });

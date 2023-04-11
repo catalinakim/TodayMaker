@@ -53,9 +53,9 @@ public class ApiTodoController {
     }
 
     @PutMapping("/todos/{id}")
-    public void editTodo(@PathVariable Long id, @RequestBody UpdateTodoDto dto){
+    public Long editTodo(@PathVariable Long id, @RequestBody UpdateTodoDto dto){
         todoService.update(id, dto.getName());
-        return;
+        return id;
     }
 
     @DeleteMapping("/todos")
