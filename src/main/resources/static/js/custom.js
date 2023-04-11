@@ -63,9 +63,18 @@ function getTodayTodoIds(){
         todayTodoIds.push(todoId);
     });
 }
-
+function todayTodoCheck(){ //오늘할일 중 카테고리X 할일 checked 표시
+    $('#cateNoTodo input[type="checkbox"]').each(function() {
+        let todoId = $(this).val();
+        if(todayTodoIds.includes(todoId)){
+            $(this).prop('checked', true);
+            $(this).prop('disabled', true);
+        }
+    });
+}
 $(document).ready(function() {
     getTodayTodoIds();
+    todayTodoCheck();
     addTodayTodosListener();
 
     $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
@@ -118,27 +127,27 @@ $(document).ready(function() {
     });
     function addTodayTodosListener(){
         // let items = document.querySelectorAll('#todayList > li') //Drag and Drop Sortable List
-        let items = document.querySelectorAll('#todayList > div') //Drag and Drop Sortable List
+        let items = document.querySelectorAll('#todayList > div'); //Drag and Drop Sortable List
 
         items.forEach(item => {
-            $(item).prop('draggable', true)
-            item.addEventListener('dragstart', dragStart)
-            item.addEventListener('drop', dropped)
-            item.addEventListener('dragenter', cancelDefault)
-            item.addEventListener('dragover', cancelDefault)
+            $(item).prop('draggable', true);
+            item.addEventListener('dragstart', dragStart);
+            item.addEventListener('drop', dropped);
+            item.addEventListener('dragenter', cancelDefault);
+            item.addEventListener('dragover', cancelDefault);
         })
     }
 
     function dragStart (e) {
-        var index = $(e.target).index()  //클릭한 요소의 인덱스
-        e.dataTransfer.setData('text/plain', index)
+        var index = $(e.target).index();  //클릭한 요소의 인덱스
+        e.dataTransfer.setData('text/plain', index);
     }
 
     function dropped (e) {
-        cancelDefault(e)
+        cancelDefault(e);
 
         // get new and old index
-        let oldIndex = e.dataTransfer.getData('text/plain') //드래그앤드롭으로 이동한 데이터
+        let oldIndex = e.dataTransfer.getData('text/plain'); //드래그앤드롭으로 이동한 데이터
         // let target = $(e.target)  //이벤트가 발생한 요소(drop한 곳에 위치한 객체)
         let target;
         if ($(e.target).is('div')) {
@@ -147,11 +156,11 @@ $(document).ready(function() {
             target = $(e.target).parent();
         }
         console.log(target);
-        let newIndex = target.index()
+        let newIndex = target.index();
 
         // remove dropped items at old place
-        let dropped = $(this).parent().children().eq(oldIndex).remove() //oldIndex인 요소 삭제
-        console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex)
+        let dropped = $(this).parent().children().eq(oldIndex).remove(); //oldIndex인 요소 삭제
+        console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex);
 
         if(newIndex == 0) {
             $('#todayList div:nth-child(1) i:last-child').remove();
@@ -159,9 +168,9 @@ $(document).ready(function() {
 
         // insert the dropped items at new place
         if (newIndex < oldIndex) {
-            target.before(dropped) //target 앞에 추가
+            target.before(dropped); //target 앞에 추가
         } else {
-            target.after(dropped)
+            target.after(dropped);
         }
 
         //3순위 border 컬러 갱신
@@ -179,12 +188,12 @@ $(document).ready(function() {
     }
 
     function cancelDefault (e) {
-        e.preventDefault()
-        e.stopPropagation()
-        return false
+        e.preventDefault();
+        e.stopPropagation();
+        return false;
     }
 
-    $(document).on('click', 'i.edit', function() { //할일삭제
+    $(document).on('click', 'i.edit', function() { //할일수정
         $(this).siblings('label').hide();
         if ($(this).prev('input[type="text"]').length) {
             $(this).prev('input[type="text"]').show();

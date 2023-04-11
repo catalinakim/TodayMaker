@@ -41,13 +41,25 @@
                         <button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" data-bs-target="#sub-cate">
                             하위카테고리
                         </button>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4"><input type="checkbox" id="todo1" name="todo1" value="1">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">
+                            <input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1"> 할일1</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
                     </div>
                     <!--*/-->
+                </li>
+            </ul>
+            <hr class="my-4">
+            <ul class="list-unstyled ps-0" th:each="todo : ${todos}" id="cateNoTodo">
+                <li th:if="${todo.category == null}">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">
+                        <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
+                        <label th:for="${todo.id}" th:text="${todo.name}"> 카테고리 없는 할일</label>
+                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                    </ul>
                 </li>
             </ul>
             <button type="button" class="btn btn-primary px-3" onclick="location.href='/category'">카테고리 추가</button>
@@ -63,9 +75,9 @@
             <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
             <div id="today">
                 <ul id="todayList" class="btn-toggle-nav list-unstyled fw-normal moveable" >
-                    <div th:each="todo : ${todayTodos}" >
-                        <input type="checkbox" th:id="'todayTodo' + ${todo.id}" th:value="${todo.id}">
-                        <label th:for="todayTodo+${todo.id}" th:text="${todo.name}">할일</label>
+                    <div th:each="tdTodo : ${todayTodos}" >
+                        <input type="checkbox" th:id="'todayTodo' + ${tdTodo.id}" th:value="${tdTodo.id}">
+                        <label th:for="todayTodo+${tdTodo.id}" th:text="${tdTodo.name}">할일</label>
                         <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
                         <i class="fa-regular fa-star fa-sm i star"></i>
                     </div>

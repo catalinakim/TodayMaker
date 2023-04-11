@@ -68,14 +68,16 @@ public class TodoService {
     @Transactional(readOnly = true)
     public List<Todo> getTodayTodos() {
         List<DailyPlan> todays = dailyPlanRepository.findTodoIdByDayEquals(LocalDate.now());
+        System.out.println(todays.size());
         List<Todo> todayTodos = new ArrayList<>();
         for (DailyPlan todo : todays) {
             Optional<Todo> todayTodo = todoRepository.findById(todo.getTodoId());
             if(!todayTodo.isPresent()){
-                System.out.println("오늘 할일 기등록 없음");
-                return null;
+                System.out.println("삭제된 오늘할일");
+                //return null;
             }else{
                 todayTodos.add(todayTodo.get()); //unwrap Optional
+                System.out.println(todayTodo.get().getId() + todayTodo.get().getName());
             }
 
         }
