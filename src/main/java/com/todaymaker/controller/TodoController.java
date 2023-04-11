@@ -10,6 +10,7 @@ import com.todaymaker.service.UserService;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,12 +50,16 @@ public class TodoController {
         return "todo/todoForm";
     }
 
-    @PostMapping("/todo")
+    @PostMapping("/todo")  //할일추가
     public String addTodo(TodoCreateDto todoDto) {
-
         //Todo todo = new Todo();  //생성자와 setter로 생성하지 않고, DTO와 생성메소드 통해서 생성
-        Todo todo = Todo.createTodo(todoDto.getUser(), todoDto.getCategory(), todoDto.getName());
-        todoService.saveTodo(todo);
+        if(todoDto.getCategory().getId() == null){  //카테고리 선택X
+            Todo todo = Todo.createTodoWOCate(todoDto.getUser(), todoDto.getName());
+            todoService.saveTodo(todo);
+        }else{
+            Todo todo = Todo.createTodo(todoDto.getUser(), todoDto.getCategory(), todoDto.getName());
+            todoService.saveTodo(todo);
+        }
 
         return "redirect:/todos";
     }

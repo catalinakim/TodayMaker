@@ -54,6 +54,13 @@ public class Todo {
         todo.setName(name);
         return todo;
     }
+    public static Todo createTodoWOCate(User user, String name) {
+        Todo todo = new Todo();
+        todo.setUser(user);
+        todo.setCategoryNull();
+        todo.setName(name);
+        return todo;
+    }
 
 
 }

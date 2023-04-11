@@ -55,7 +55,7 @@ public class CategoryService {
         return id;
     }
     @Transactional
-    public Long deleteWithoutDelSubCategory(Long id) {
+    public Long deleteWODelSubCategory(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         category.ifPresent(category1 -> {
             for(Todo todo : category1.getTodos()){

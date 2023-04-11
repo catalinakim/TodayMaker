@@ -15,7 +15,6 @@ public class TodoJpaRepository {
 
     public void save(Todo todo) {
         if (todo.getId() == null) {
-            System.out.println("TodoRepository.save");
             em.persist(todo);
         } else {
             //할일 수정시

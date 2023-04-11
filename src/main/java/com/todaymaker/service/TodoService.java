@@ -72,8 +72,7 @@ public class TodoService {
         List<Todo> todayTodos = new ArrayList<>();
         for (DailyPlan todo : todays) {
             Optional<Todo> todayTodo = todoRepository.findById(todo.getTodoId());
-            if(!todayTodo.isPresent()){
-                System.out.println("삭제된 오늘할일");
+            if(!todayTodo.isPresent()){  //삭제된 오늘할일
                 //return null;
             }else{
                 todayTodos.add(todayTodo.get()); //unwrap Optional
