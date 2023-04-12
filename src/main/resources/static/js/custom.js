@@ -42,7 +42,7 @@ function getTodos(categoryId){
     .done(function (data, textStatus, jqXHR) {
         const todos = data;
         for (let i = 0; i < todos.length; i++) {
-            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">';
+            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">';
             if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
                 subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
             }else{
@@ -120,7 +120,7 @@ $(document).ready(function() {
                 success: function(data) {
                     const todos = data;
                     for (let i = 0; i < todos.length; i++) {
-                        let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal sub-cate">';
+                        let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal sub-cate todo">';
                         if(todayTodoIds.includes(todos[i]["id"]+"")){
                             subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
                         }else{
@@ -231,9 +231,29 @@ $(document).ready(function() {
             $(this).siblings('input:text').val('').val(text);
         }
     });
+    $(document).on('blur', '.todo input:text', function(e) {  //할일수정 후
+        console.log('할일수정후');
+        $(this).siblings('label').text($(this).val());
+        $(this).siblings('label').show();
+        $(this).hide();
+        var text = $(this).val();
+        var id = $(this).siblings('input:checkbox').val();
+        $.ajax({
+            url: '/todos/'+id,
+            type: 'PUT',
+            data: JSON.stringify({name: text}),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function(res) {
+                if(id == res){
+                    $("#info").fadeIn();
+                    $("#info").fadeOut();
+                }
+            }
+        });
+    });
     $(document).on('click', 'i.cate-edit', function() { //카테고리 수정
         let cateName = $(this).siblings('button').text();
-        console.log(cateName);
         $(this).siblings('button').text('');
         if ($(this).siblings('input:text').length) {
             $(this).siblings('input:text').show();
@@ -245,9 +265,8 @@ $(document).ready(function() {
         }
     });
 
-    $(document).on('blur', '.cateList input:text', function(e) { //카테고리 수정후
+    $(document).on('blur', '.cate input:text', function(e) { //카테고리 수정후
         let cateName = $(this).val();
-        console.log(cateName);
         $(this).siblings('button').text(cateName);
         $(this).siblings('button').show();
         $(this).hide();
@@ -289,8 +308,21 @@ $(document).ready(function() {
         $.ajax({
             url: '/categories/'+id,
             type: 'DELETE',
+            context: this,
             success: function(data) {
+                //카테고리/서브카테고리 삭제시 하위할일 -> 노카테고리zone으로 보내기
                 if(data == id){
+                    if($(this).siblings('button').hasClass("sub-cate-btn")){//서브카테고리이면 하위할일 밑으로
+                        let subTodos = $(this).parent().next('.sub-todo').children();
+                        subTodos.removeClass('sub-todo').addClass('noCate');
+                        subTodos.appendTo('#noCateZone');
+                        $(this).parent().next('.noCate').children().remove();
+                    }else{ //상위카테고리도 삭제시 하위할일 밑으로(노카테고리 영역으로)
+                        let todos = $(this).parent().next('div').children('ul');
+                        // todos.removeClass('sub-todo').addClass('noCate');
+                        todos.appendTo('#noCateZone');
+                        $(this).parent().next('div').children('ul').remove();
+                    }
                     parent.remove();
                 }
             }

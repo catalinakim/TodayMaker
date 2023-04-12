@@ -40,15 +40,19 @@ public class CategoryService {
 
     @Transactional
     public Long deleteWithSubCategory(Long id) {
-        Optional<Category> category = categoryRepository.findById(id);
-        category.ifPresent(category1 -> {
-            for(Todo todo : category1.getTodos()){
+        Optional<Category> categories = categoryRepository.findById(id);
+        categories.ifPresent(category -> {
+            for(Todo todo : category.getTodos()){
                 todo.setCategoryNull();
             }
             //하위카테고리삭제
-            for(Category child : category1.getChild()){
+            for(Category child : category.getChild()){
                 child.setParentNull();
                 categoryRepository.deleteById(child.getId());
+            }
+            //상위카테고리가 있으면 null처리 후
+            if(category.getParent() != null){
+                category.setParentNull();
             }
             categoryRepository.deleteById(id);
         });

@@ -31,8 +31,8 @@
             <ul class="list-unstyled ps-0" th:each="category : ${categories}">
                 <li th:if="${category.parent == null}">
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
-                    <div class="v-center">
-                        <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                    <div class="v-center cate">
+                        <button th:field="${category.id}"  class="btn btn-toggle collapsed" data-bs-toggle="collapse"
                                 th:attr="data-bs-target='#cate'+${category.id}" th:text="${category.name}"
                                 th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
                                 상위카테고리
@@ -44,7 +44,7 @@
                     </div>
                     <!--/*-->
                     <div class="collapse show sub-cate-div" id="cate1" >
-                        <div class="v-center">
+                        <div class="v-center cate">
                             <button class="btn btn-toggle collapsed sub-cate-btn" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
                                 하위카테고리
                             </button>
@@ -59,13 +59,13 @@
                                 <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                             </ul>
                         </div>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">
                             <input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1">노렌더링 할일1</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">
                             <input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1">노렌더링 할일2</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
@@ -76,25 +76,27 @@
                 </li>
             </ul>
             <hr class="my-4">
-            <h6 class="part">No Category</h6>
-            <ul class="list-unstyled noCate" th:each="todo : ${noCateTodos}">
-                <li th:if="${todo.category == null}">
-                    <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
-                    <label th:for="${todo.id}" th:text="${todo.name}">카테고리 없는 할일</label>
-                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                </li>
-            </ul>
-            <!--/*-->
-            <ul class="list-unstyled noCate">
-                <li>
-                    <input type="checkbox" id="68" value="68">
-                    <label for="68">카테고리 없는 할일2</label>
-                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                </li>
-            </ul>
-            <!--*/-->
+            <div id="noCateZone">
+                <h6 class="part">No Category</h6>
+                <ul class="list-unstyled noCate todo" th:each="todo : ${noCateTodos}">
+                    <li th:if="${todo.category == null}">
+                        <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
+                        <label th:for="${todo.id}" th:text="${todo.name}">카테고리 없는 할일</label>
+                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                    </li>
+                </ul>
+                <!--/*-->
+                <ul class="list-unstyled noCate">
+                    <li>
+                        <input type="checkbox" id="68" value="68">
+                        <label for="68">카테고리 없는 할일2</label>
+                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                    </li>
+                </ul>
+                <!--*/-->
+            </div>
             <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/category'">카테고리 추가</button>
             <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/todo'">할일 추가</button>
             <div id="info" style="display: none">수정 완료!</div>
