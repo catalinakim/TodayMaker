@@ -13,7 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -51,7 +55,13 @@ public class TodoController {
     }
 
     @PostMapping("/todo")  //할일추가
-    public String addTodo(TodoCreateDto todoDto) {
+    public String addTodo(@ModelAttribute("todo") TodoCreateDto todoDto, BindingResult bindingResult) {
+        if(!StringUtils.hasText(todoDto.getName())){
+            bindingResult.addError(new FieldError("todo","name","할일 공백 불가"));
+        }
+        if(bindingResult.hasErrors()){
+            return "todo/todoForm";
+        }
         //Todo todo = new Todo();  //생성자와 setter로 생성하지 않고, DTO와 생성메소드 통해서 생성
         if(todoDto.getCategory().getId() == null){  //카테고리 선택X
             Todo todo = Todo.createTodoWOCate(todoDto.getUser(), todoDto.getName());
