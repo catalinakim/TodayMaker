@@ -72,7 +72,10 @@ public class TodoController {
         model.addAttribute("date", LocalDateTime.now());
 
         List<Todo> todos = todoService.findTodos();
-        model.addAttribute("todos", todos);
+        //model.addAttribute("todos", todos);
+        List<Todo> noCateTodos = todoService.findNoCateTodos();
+        model.addAttribute("noCateTodos", noCateTodos);
+
 
         List<Todo> todayTodos = todoService.getTodayTodos();
         model.addAttribute("todayTodos", todayTodos);

@@ -26,27 +26,48 @@
 </header>
 <div class="container">
     <div class="row">
-        <div class="col-5" id="todoArea">
+        <div class="col-5 cateList" id="todoArea">
             <hr class="my-4">
             <ul class="list-unstyled ps-0" th:each="category : ${categories}">
                 <li th:if="${category.parent == null}">
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
-                    <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                            th:attr="data-bs-target='#cate'+${category.id}" th:text="${category.name}"
-                            th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
-                            상위카테고리
-                    </button>
-                    <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
+                    <div class="v-center">
+                        <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
+                                th:attr="data-bs-target='#cate'+${category.id}" th:text="${category.name}"
+                                th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
+                                상위카테고리
+                        </button>
+                        <i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>
+                        <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
+                    </div>
                     <div class="collapse" th:id="'cate'+${category.id}" >
                     </div>
                     <!--/*-->
-                    <div class="collapse show" th:id="'cate'+${category.id}" >
-                        <button class="btn btn-toggle align-items-center rounded collapsed ms-3 sub-cate" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
-                            하위카테고리
-                        </button>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">
+                    <div class="collapse show sub-cate-div" id="cate1" >
+                        <div class="v-center">
+                            <button class="btn btn-toggle collapsed sub-cate-btn" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
+                                하위카테고리
+                            </button>
+                            <i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>
+                            <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
+                        </div>
+                        <div class="collapse show sub-todo" id="sub-cate2">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal sub-cate">
+                                <input type="checkbox" id="todo53" value="53">
+                                <label for="todo53">하위카테고리의 할일</label>
+                                <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                                <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                            </ul>
+                        </div>
+                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1">
                             <input type="checkbox" id="todo1" name="todo1" value="1">
-                            <label for="todo1"> 할일1</label>
+                            <label for="todo1">노렌더링 할일1</label>
+                            <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                            <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                        </ul>
+                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1">
+                            <input type="checkbox" id="todo1" name="todo1" value="1">
+                            <label for="todo1">노렌더링 할일2</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
@@ -55,18 +76,27 @@
                 </li>
             </ul>
             <hr class="my-4">
-            <ul class="list-unstyled ps-0" th:each="todo : ${todos}" id="cateNoTodo">
+            <h6 class="part">No Category</h6>
+            <ul class="list-unstyled noCate" th:each="todo : ${noCateTodos}">
                 <li th:if="${todo.category == null}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">
-                        <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
-                        <label th:for="${todo.id}" th:text="${todo.name}"> 카테고리 없는 할일</label>
-                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                    </ul>
+                    <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
+                    <label th:for="${todo.id}" th:text="${todo.name}">카테고리 없는 할일</label>
+                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                 </li>
             </ul>
-            <button type="button" class="btn btn-primary px-3" onclick="location.href='/category'">카테고리 추가</button>
-            <button type="button" class="btn btn-primary px-3" onclick="location.href='/todo'">할일 추가</button>
+            <!--/*-->
+            <ul class="list-unstyled noCate">
+                <li>
+                    <input type="checkbox" id="68" value="68">
+                    <label for="68">카테고리 없는 할일2</label>
+                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
+                </li>
+            </ul>
+            <!--*/-->
+            <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/category'">카테고리 추가</button>
+            <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/todo'">할일 추가</button>
             <div id="info" style="display: none">수정 완료!</div>
         </div>
         <div class="col">

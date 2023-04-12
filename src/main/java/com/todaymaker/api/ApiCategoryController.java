@@ -4,12 +4,10 @@ import com.todaymaker.domain.Category;
 import com.todaymaker.dto.CategoryDto;
 import com.todaymaker.repository.CategoryJpaRepository;
 import com.todaymaker.service.CategoryService;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,10 +39,21 @@ public class ApiCategoryController {
         return result;
     }
 
+    @PutMapping("/categories/{id}")
+    public Long editCategory(@PathVariable Long id, @RequestBody EditCateDto dto){
+        Long editId = categoryService.editCategory(id, dto.getName());
+        return editId;
+    }
+
     @DeleteMapping("/categories/{id}")
     public Long delCategory(@PathVariable Long id){
         Long delId = categoryService.deleteWithSubCategory(id);
         return delId;
+    }
+
+    @Data
+    static class EditCateDto{
+        private String name;
     }
 
 

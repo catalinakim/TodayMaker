@@ -104,4 +104,9 @@ public class TodoService {
         List<Todo> todos = todoRepository.findByCategoryId(cateId);
         return todos;
     }
+
+    public List<Todo> findNoCateTodos() {
+        List<Todo> noCateTodos = todoRepository.findByCategoryIsNull();
+        return noCateTodos;
+    }
 }

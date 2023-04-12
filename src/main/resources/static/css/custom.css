@@ -9,7 +9,7 @@
     align-items: center;
     padding: .25rem .5rem;
     font-weight: 600;
-    color: rgba(0, 0, 0, .65);
+    /*color: rgba(0, 0, 0, .65);*/
     background-color: transparent;
     border: 0;
 }
@@ -48,7 +48,7 @@
 /* 추가 */
 .i {
     float: right;
-    color: #a3a3a3;
+    color: #c0c0c0; /*#a3a3a3;*/
     margin-top:12px;
     margin-right: 5px;
 }
@@ -58,8 +58,12 @@
 .star-on {
     color: #e1b500;
 }
-.cate-del {
+.cate-del, .cate-edit {
     color: #c0c0c0;
+    float: right;
+    margin-left: 10px;
+}
+.cate-del {
     margin-left: 5px;
 }
 /* drag and drop */
@@ -103,9 +107,6 @@ input[type=checkbox] {
     cursor: default;
     border-radius: 30%;
 }
-.edit {
-    margin-right: 10px;
-}
 label {
     padding-left: 3px;
     padding-right: 3px;
@@ -114,6 +115,27 @@ label {
     border-color: #dc3545;
     color: #dc3545;
 }
+.sub-todo{
+    margin-bottom: 0.5rem;
+}
+.sub-cate-btn{
+    margin-left: 1rem;
+}
 .sub-cate{
     margin-left: 3rem;
+}
+.v-center{
+    display:flex;
+    align-items:center;
+}
+.sub{
+    align-items:center;
+}
+.part{
+    font-weight: bold;
+    color: #9b9b9b;
+}
+.noCate{
+    margin-left: 1.75rem;
+    margin-bottom: 0.25rem;
 }

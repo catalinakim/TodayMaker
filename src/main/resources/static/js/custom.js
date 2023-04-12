@@ -14,9 +14,13 @@ function showSubCategories(e) {
         .done(function (data, textStatus, jqXHR) {
             const subCateArr = data;
             for (let i = 0; i < subCateArr.length; i++) {
-                let subhtml = '<button class="btn btn-toggle align-items-center rounded collapsed ms-3 sub-cate" data-bs-toggle="collapse" '
-                    + 'data-bs-target="#sub-cate' + subCateArr[i]["id"]+ '"> ' + subCateArr[i]["name"] + '</button>'
-                    + '<div class="collapse" id="sub-cate' + subCateArr[i]["id"]+ '"> </div>';
+                let subhtml = '<div class="v-center">'
+                    + '<button class="btn btn-toggle collapsed sub-cate-btn" data-bs-toggle="collapse" '
+                    + 'data-bs-target="#sub-cate'+ subCateArr[i].id+'" value='+subCateArr[i].id+'>' + subCateArr[i]["name"] + '</button>'
+                    + '<i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>'
+                    + '<i class="fa-regular fa-trash-can fa-sm cate-del"></i>'
+                    + '</div>'
+                    + '<div class="collapse sub-todo" id="sub-cate' + subCateArr[i]["id"]+ '"></div>';
                 $("#cate"+id).html(subhtml);
             }
             getSubCategories[id] = true;
@@ -40,9 +44,9 @@ function getTodos(categoryId){
         for (let i = 0; i < todos.length; i++) {
             let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">';
             if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
-                subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
+                subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
             }else{
-                subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
+                subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
             }
             subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
                 + '<i class="fa-regular fa-trash-can fa-sm i del"></i>'
@@ -63,8 +67,8 @@ function getTodayTodoIds(){
         todayTodoIds.push(todoId);
     });
 }
-function todayTodoCheck(){ //오늘할일 중 카테고리X 할일 checked 표시
-    $('#cateNoTodo input[type="checkbox"]').each(function() {
+function todayTodoCheck(){ //오늘할일 중 카테고리없는 할일 checked 표시
+    $('.noCate input[type="checkbox"]').each(function() {
         let todoId = $(this).val();
         if(todayTodoIds.includes(todoId)){
             $(this).prop('checked', true);
@@ -107,7 +111,7 @@ $(document).ready(function() {
         $('input[type=checkbox]:checked').prop('disabled', true);
     });
 
-    $(document).on("click", ".sub-cate", function() {
+    $(document).on("click", ".sub-cate-btn", function() {  //서브카테고리 클릭시 할일 가져오기
         let subCateId = $(this).attr('data-bs-target').substring(9);
         if(getSubCategories[subCateId]==false){  //카테고리 내용 가져오지 않았었으면
             $.ajax({
@@ -118,9 +122,9 @@ $(document).ready(function() {
                     for (let i = 0; i < todos.length; i++) {
                         let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal sub-cate">';
                         if(todayTodoIds.includes(todos[i]["id"]+"")){
-                            subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
+                            subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
                         }else{
-                            subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
+                            subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
                         }
                         subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
                             + '<i class="fa-regular fa-trash-can fa-sm i del"></i>'
@@ -163,15 +167,12 @@ $(document).ready(function() {
             item.addEventListener('dragover', cancelDefault);
         })
     }
-
     function dragStart (e) {
         var index = $(e.target).index();  //클릭한 요소의 인덱스
         e.dataTransfer.setData('text/plain', index);
     }
-
     function dropped (e) {
         cancelDefault(e);
-
         // get new and old index
         let oldIndex = e.dataTransfer.getData('text/plain'); //드래그앤드롭으로 이동한 데이터
         // let target = $(e.target)  //이벤트가 발생한 요소(drop한 곳에 위치한 객체)
@@ -181,7 +182,6 @@ $(document).ready(function() {
         }else{
             target = $(e.target).parent();
         }
-        console.log(target);
         let newIndex = target.index();
 
         // remove dropped items at old place
@@ -231,21 +231,35 @@ $(document).ready(function() {
             $(this).siblings('input:text').val('').val(text);
         }
     });
+    $(document).on('click', 'i.cate-edit', function() { //카테고리 수정
+        let cateName = $(this).siblings('button').text();
+        console.log(cateName);
+        $(this).siblings('button').text('');
+        if ($(this).siblings('input:text').length) {
+            $(this).siblings('input:text').show();
+            $(this).siblings('input:text').focus();
+        } else {
+            $(this).before('<input type="text" value="'+cateName+'" />');
+            $(this).prev('input:text').focus();
+            $(this).prev('input:text').val('').val(cateName);
+        }
+    });
 
-    $(document).on('blur', 'input:text', function(e) {
-        $(this).siblings('label').text($(this).val());
-        $(this).siblings('label').show();
+    $(document).on('blur', '.cateList input:text', function(e) { //카테고리 수정후
+        let cateName = $(this).val();
+        console.log(cateName);
+        $(this).siblings('button').text(cateName);
+        $(this).siblings('button').show();
         $(this).hide();
-        var text = $(this).val();
-        var id = $(this).siblings('input:checkbox').val();
+        let cateId = $(this).siblings('button').val();
         $.ajax({
-            url: '/todos/'+id,
+            url: '/categories/'+cateId,
             type: 'PUT',
-            data: JSON.stringify({name: text}),
+            data: JSON.stringify({name: cateName}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function(res) {
-                if(id == res){
+                if(cateId == res){
                     $("#info").fadeIn();
                     $("#info").fadeOut();
                 }

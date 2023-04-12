@@ -55,7 +55,7 @@ public class CategoryService {
         return id;
     }
     @Transactional
-    public Long deleteWODelSubCategory(Long id) {
+    public Long deleteWithoutSubCategory(Long id) {
         Optional<Category> category = categoryRepository.findById(id);
         category.ifPresent(category1 -> {
             for(Todo todo : category1.getTodos()){
@@ -63,6 +63,14 @@ public class CategoryService {
             }
             category1.getChild().forEach(child -> child.setParentNull());
             categoryRepository.deleteById(id);
+        });
+        return id;
+    }
+    @Transactional
+    public Long editCategory(Long id, String name) {
+        Optional<Category> categories = categoryRepository.findById(id);
+        categories.ifPresent(category -> {
+            category.setName(name);
         });
         return id;
     }
