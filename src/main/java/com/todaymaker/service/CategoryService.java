@@ -47,6 +47,9 @@ public class CategoryService {
             }
             //하위카테고리삭제
             for(Category child : category.getChild()){
+                for(Todo todo : child.getTodos()){//하위카테고리에 할일이 있으면
+                    todo.setCategoryNull();
+                }
                 child.setParentNull();
                 categoryRepository.deleteById(child.getId());
             }

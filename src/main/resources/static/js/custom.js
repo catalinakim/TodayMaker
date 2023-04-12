@@ -1,8 +1,6 @@
 let todayTodoIds = new Array();
 
 function showSubCategories(e) {
-    console.log(Object.keys(getSubCategories));
-    console.log(Object.values(getSubCategories));
     var id = $(e).val();
     if($(e).attr('aria-expanded')=="true" && getSubCategories[id]==false){
         var url = "/categories/"+id+"/subcategories";
@@ -14,8 +12,8 @@ function showSubCategories(e) {
         .done(function (data, textStatus, jqXHR) {
             const subCateArr = data;
             for (let i = 0; i < subCateArr.length; i++) {
-                let subhtml = '<div class="v-center">'
-                    + '<button class="btn btn-toggle collapsed sub-cate-btn" data-bs-toggle="collapse" '
+                let subhtml = '<div class="v-center cate">'
+                    + '<button class="btn btn-toggle collapsed sub-cate" data-bs-toggle="collapse" '
                     + 'data-bs-target="#sub-cate'+ subCateArr[i].id+'" value='+subCateArr[i].id+'>' + subCateArr[i]["name"] + '</button>'
                     + '<i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>'
                     + '<i class="fa-regular fa-trash-can fa-sm cate-del"></i>'
@@ -42,7 +40,7 @@ function getTodos(categoryId){
     .done(function (data, textStatus, jqXHR) {
         const todos = data;
         for (let i = 0; i < todos.length; i++) {
-            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">';
+            let subhtml = '<ul class="list-unstyled ps-1 ms-4 mb-1 todo">';
             if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
                 subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
             }else{
@@ -68,7 +66,7 @@ function getTodayTodoIds(){
     });
 }
 function todayTodoCheck(){ //오늘할일 중 카테고리없는 할일 checked 표시
-    $('.noCate input[type="checkbox"]').each(function() {
+    $('#noCateZone input[type="checkbox"]').each(function() {
         let todoId = $(this).val();
         if(todayTodoIds.includes(todoId)){
             $(this).prop('checked', true);
@@ -111,7 +109,7 @@ $(document).ready(function() {
         $('input[type=checkbox]:checked').prop('disabled', true);
     });
 
-    $(document).on("click", ".sub-cate-btn", function() {  //서브카테고리 클릭시 할일 가져오기
+    $(document).on("click", ".sub-cate", function() {  //서브카테고리 클릭시 할일 가져오기
         let subCateId = $(this).attr('data-bs-target').substring(9);
         if(getSubCategories[subCateId]==false){  //카테고리 내용 가져오지 않았었으면
             $.ajax({
@@ -120,7 +118,7 @@ $(document).ready(function() {
                 success: function(data) {
                     const todos = data;
                     for (let i = 0; i < todos.length; i++) {
-                        let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal sub-cate todo">';
+                        let subhtml = '<ul class="list-unstyled sub-todo todo">';
                         if(todayTodoIds.includes(todos[i]["id"]+"")){
                             subhtml += '<input type="checkbox" id="todo'+todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
                         }else{
@@ -136,9 +134,8 @@ $(document).ready(function() {
             })
         }
     });
-    $(document).on("click", ".today-minus", function(){  //i태그 - 버튼 클릭시
+    $(document).on("click", ".today-minus", function(){  //오늘할일에서 제외 클릭시
         var removeFromToday = $(this).prev().prev().val();
-        console.log("삭제 클릭한 것: " + $(this).prev().text());
         $.ajax({
             url: '/todos/today',
             type: 'DELETE',
@@ -156,9 +153,7 @@ $(document).ready(function() {
         });
     });
     function addTodayTodosListener(){
-        // let items = document.querySelectorAll('#todayList > li') //Drag and Drop Sortable List
         let items = document.querySelectorAll('#todayList > div'); //Drag and Drop Sortable List
-
         items.forEach(item => {
             $(item).prop('draggable', true);
             item.addEventListener('dragstart', dragStart);
@@ -189,16 +184,14 @@ $(document).ready(function() {
         console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex);
 
         if(newIndex == 0) {
-            $('#todayList div:nth-child(1) i:last-child').remove();
+            $('#todayList div:nth-child(1) i:last-child').remove(); //1순위 숫자1 제거
         }
-
         // insert the dropped items at new place
         if (newIndex < oldIndex) {
             target.before(dropped); //target 앞에 추가
         } else {
             target.after(dropped);
         }
-
         //3순위 border 컬러 갱신
         if(newIndex <= 2 || oldIndex <= 2){  //3순위 이하꺼를 옮기거나, 3순위 이하로 옮겨지면
             $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
@@ -212,13 +205,11 @@ $(document).ready(function() {
             $('#todayList div:nth-child('+todoNewIndex+') i:last-child').remove();
         }
     }
-
     function cancelDefault (e) {
         e.preventDefault();
         e.stopPropagation();
         return false;
     }
-
     $(document).on('click', 'i.edit', function() { //할일수정
         $(this).siblings('label').hide();
         if ($(this).siblings('input[type="text"]').length) {
@@ -232,9 +223,7 @@ $(document).ready(function() {
         }
     });
     $(document).on('blur', '.todo input:text', function(e) {  //할일수정 후
-        console.log('할일수정후');
-        $(this).siblings('label').text($(this).val());
-        $(this).siblings('label').show();
+        $(this).siblings('label').text($(this).val()).show();
         $(this).hide();
         var text = $(this).val();
         var id = $(this).siblings('input:checkbox').val();
@@ -264,7 +253,6 @@ $(document).ready(function() {
             $(this).prev('input:text').val('').val(cateName);
         }
     });
-
     $(document).on('blur', '.cate input:text', function(e) { //카테고리 수정후
         let cateName = $(this).val();
         $(this).siblings('button').text(cateName);
@@ -302,7 +290,7 @@ $(document).ready(function() {
             }
         })
     });
-    $(document).on('click','i.cate-del',function (){ //카테고리 삭제
+    $(document).on('click','i.cate-del',function (){ //카테고리 삭제(하위카테고리도 삭제)
         var id = $(this).siblings('button').val();
         var parent = $(this).parent();
         $.ajax({
@@ -310,16 +298,15 @@ $(document).ready(function() {
             type: 'DELETE',
             context: this,
             success: function(data) {
-                //카테고리/서브카테고리 삭제시 하위할일 -> 노카테고리zone으로 보내기
+                //상위/서브카테고리 삭제시 할일들 -> 노카테고리zone으로 보내기
                 if(data == id){
-                    if($(this).siblings('button').hasClass("sub-cate-btn")){//서브카테고리이면 하위할일 밑으로
-                        let subTodos = $(this).parent().next('.sub-todo').children();
-                        subTodos.removeClass('sub-todo').addClass('noCate');
+                    if($(this).siblings('button').hasClass("sub-cate")){//서브카테고리 삭제시 하위할일 밑으로
+                        let subTodos = $(this).parent().next('div').children();
+                        subTodos.removeClass('sub-todo');
                         subTodos.appendTo('#noCateZone');
-                        $(this).parent().next('.noCate').children().remove();
-                    }else{ //상위카테고리도 삭제시 하위할일 밑으로(노카테고리 영역으로)
+                        $(this).parent().next('div').children().remove();
+                    }else{  //상위카테고리 삭제시에도 할일들 밑으로(노카테고리 영역으로)
                         let todos = $(this).parent().next('div').children('ul');
-                        // todos.removeClass('sub-todo').addClass('noCate');
                         todos.appendTo('#noCateZone');
                         $(this).parent().next('div').children('ul').remove();
                     }

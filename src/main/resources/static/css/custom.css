@@ -43,7 +43,8 @@
 }
 .btn-toggle-nav a:hover,
 .btn-toggle-nav a:focus {
-    background-color: #dedede;
+    background-color: #f34051; /*#dedede;*/
+    border-color: #f34051;
 }
 /* 추가 */
 .i {
@@ -117,12 +118,10 @@ label {
 }
 .sub-todo{
     margin-bottom: 0.5rem;
-}
-.sub-cate-btn{
-    margin-left: 1rem;
+    margin-left: 1.5rem;
 }
 .sub-cate{
-    margin-left: 3rem;
+    margin-left: 1rem;
 }
 .v-center{
     display:flex;
@@ -135,7 +134,7 @@ label {
     font-weight: bold;
     color: #9b9b9b;
 }
-.noCate{
+#noCateZone ul{
     margin-left: 1.75rem;
     margin-bottom: 0.25rem;
 }

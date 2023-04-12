@@ -26,7 +26,7 @@
 </header>
 <div class="container">
     <div class="row">
-        <div class="col-5 cateList" id="todoArea">
+        <div class="col-5" id="cateTodoArea">
             <hr class="my-4">
             <ul class="list-unstyled ps-0" th:each="category : ${categories}">
                 <li th:if="${category.parent == null}">
@@ -43,30 +43,30 @@
                     <div class="collapse" th:id="'cate'+${category.id}" >
                     </div>
                     <!--/*-->
-                    <div class="collapse show sub-cate-div" id="cate1" >
+                    <div class="collapse show" id="cate1" >
                         <div class="v-center cate">
-                            <button class="btn btn-toggle collapsed sub-cate-btn" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
+                            <button class="btn btn-toggle collapsed sub-cate" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
                                 하위카테고리
                             </button>
                             <i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>
                             <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
                         </div>
-                        <div class="collapse show sub-todo" id="sub-cate2">
-                            <ul class="btn-toggle-nav list-unstyled fw-normal sub-cate">
+                        <div class="collapse show" id="sub-cate2">
+                            <ul class="list-unstyled sub-todo">
                                 <input type="checkbox" id="todo53" value="53">
                                 <label for="todo53">하위카테고리의 할일</label>
                                 <i class="fa-regular fa-trash-can fa-sm i del"></i>
                                 <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                             </ul>
                         </div>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">
+                        <ul class="list-unstyled ps-1 ms-4 mb-1 todo">
                             <input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1">노렌더링 할일1</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4 mb-1 todo">
-                            <input type="checkbox" id="todo1" name="todo1" value="1">
+                        <ul class="list-unstyled ps-1 ms-4 mb-1 todo">
+                            <input type="checkbox" id="todo2" name="todo2" value="1">
                             <label for="todo1">노렌더링 할일2</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
@@ -78,22 +78,18 @@
             <hr class="my-4">
             <div id="noCateZone">
                 <h6 class="part">No Category</h6>
-                <ul class="list-unstyled noCate todo" th:each="todo : ${noCateTodos}">
-                    <li th:if="${todo.category == null}">
-                        <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
-                        <label th:for="${todo.id}" th:text="${todo.name}">카테고리 없는 할일</label>
-                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                    </li>
+                <ul class="list-unstyled todo" th:each="todo : ${noCateTodos}">
+                    <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
+                    <label th:for="${todo.id}" th:text="${todo.name}">카테고리 없는 할일</label>
+                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                 </ul>
                 <!--/*-->
-                <ul class="list-unstyled noCate">
-                    <li>
-                        <input type="checkbox" id="68" value="68">
-                        <label for="68">카테고리 없는 할일2</label>
-                        <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                        <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                    </li>
+                <ul class="list-unstyled">
+                    <input type="checkbox" id="68" value="68">
+                    <label for="68">카테고리 없는 할일2</label>
+                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
+                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                 </ul>
                 <!--*/-->
             </div>
@@ -110,7 +106,7 @@
             <span th:text="${#temporals.format(date, 'yyyy년 M월 d일')}">날짜</span>
             <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
             <div id="today">
-                <ul id="todayList" class="btn-toggle-nav list-unstyled fw-normal moveable" >
+                <ul id="todayList" class="btn-toggle-nav list-unstyled moveable" >
                     <div th:each="tdTodo : ${todayTodos}" >
                         <input type="checkbox" th:id="'todayTodo' + ${tdTodo.id}" th:value="${tdTodo.id}">
                         <label th:for="todayTodo+${tdTodo.id}" th:text="${tdTodo.name}">할일</label>
