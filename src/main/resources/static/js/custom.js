@@ -14,10 +14,10 @@ function showSubCategories(e) {
         .done(function (data, textStatus, jqXHR) {
             const subCateArr = data;
             for (let i = 0; i < subCateArr.length; i++) {
-                let subhtml = '<button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" '
+                let subhtml = '<button class="btn btn-toggle align-items-center rounded collapsed ms-3 sub-cate" data-bs-toggle="collapse" '
                     + 'data-bs-target="#sub-cate' + subCateArr[i]["id"]+ '"> ' + subCateArr[i]["name"] + '</button>'
                     + '<div class="collapse" id="sub-cate' + subCateArr[i]["id"]+ '"> </div>';
-                $("#cate-collapse"+id).html(subhtml);
+                $("#cate"+id).html(subhtml);
             }
             getSubCategories[id] = true;
             getTodos(id);
@@ -38,7 +38,7 @@ function getTodos(categoryId){
     .done(function (data, textStatus, jqXHR) {
         const todos = data;
         for (let i = 0; i < todos.length; i++) {
-            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">';
+            let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">';
             if(todayTodoIds.includes(todos[i]["id"]+"")){  //숫자->문자
                 subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
             }else{
@@ -47,7 +47,7 @@ function getTodos(categoryId){
             subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
                 + '<i class="fa-regular fa-trash-can fa-sm i del"></i>'
                 + '<i class="fa-regular fa-pen-to-square fa-sm i edit"></i> </ul>';
-            $("#cate-collapse"+categoryId).append(subhtml);
+            $("#cate"+categoryId).append(subhtml);
         }
         console.log("선택한 카테고리의 할일 갯수: " + todos.length+", 상태코드: " + jqXHR.status);
     })
@@ -105,6 +105,32 @@ $(document).ready(function() {
             }
         });
         $('input[type=checkbox]:checked').prop('disabled', true);
+    });
+
+    $(document).on("click", ".sub-cate", function() {
+        let subCateId = $(this).attr('data-bs-target').substring(9);
+        if(getSubCategories[subCateId]==false){  //카테고리 내용 가져오지 않았었으면
+            $.ajax({
+                url: '/categories/sub/'+subCateId,
+                type: 'GET',
+                success: function(data) {
+                    const todos = data;
+                    for (let i = 0; i < todos.length; i++) {
+                        let subhtml = '<ul class="btn-toggle-nav list-unstyled fw-normal sub-cate">';
+                        if(todayTodoIds.includes(todos[i]["id"]+"")){
+                            subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" disabled checked>\n';
+                        }else{
+                            subhtml += '<input type="checkbox" id="'+todos[i]["id"]+ '" name="todo' + todos[i]["id"]+ '" value="' + todos[i]["id"]+ '" >\n';
+                        }
+                        subhtml += '<label for="todo' + todos[i]["id"]+ '"> ' + todos[i]["name"]+ '</label>'
+                            + '<i class="fa-regular fa-trash-can fa-sm i del"></i>'
+                            + '<i class="fa-regular fa-pen-to-square fa-sm i edit"></i> </ul>';
+                        $("#sub-cate"+subCateId).append(subhtml);
+                    }
+                    getSubCategories[subCateId] = true;
+                }
+            })
+        }
     });
     $(document).on("click", ".today-minus", function(){  //i태그 - 버튼 클릭시
         var removeFromToday = $(this).prev().prev().val();

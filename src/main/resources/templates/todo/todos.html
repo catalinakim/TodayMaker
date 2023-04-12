@@ -16,7 +16,9 @@
 <script type="text/javascript">
     $(document).ready(function(){
          $("#header").load("../fragments/header.html");
-        // $("#today input[type='checkbox'][value=3]").parent().css('background-color', 'blue');
+        $(document).on("click", ".sub-cate", function() {
+            let subCateId = $(this).attr('data-bs-target').substring(9);
+        });
     });
 </script><!--*/-->
 <body>
@@ -30,19 +32,19 @@
                 <li th:if="${category.parent == null}">
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
                     <button th:field="${category.id}"  class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse"
-                            th:attr="data-bs-target='#cate-collapse'+${category.id}" th:text="${category.name}"
+                            th:attr="data-bs-target='#cate'+${category.id}" th:text="${category.name}"
                             th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
                             상위카테고리
                     </button>
                     <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
-                    <div class="collapse" th:id="'cate-collapse'+${category.id}" >
+                    <div class="collapse" th:id="'cate'+${category.id}" >
                     </div>
                     <!--/*-->
-                    <div class="collapse show" th:id="'cate-collapse'+${category.id}" >
-                        <button class="btn btn-toggle align-items-center rounded collapsed ms-4" data-bs-toggle="collapse" data-bs-target="#sub-cate">
+                    <div class="collapse show" th:id="'cate'+${category.id}" >
+                        <button class="btn btn-toggle align-items-center rounded collapsed ms-3 sub-cate" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
                             하위카테고리
                         </button>
-                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">
                             <input type="checkbox" id="todo1" name="todo1" value="1">
                             <label for="todo1"> 할일1</label>
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
@@ -55,7 +57,7 @@
             <hr class="my-4">
             <ul class="list-unstyled ps-0" th:each="todo : ${todos}" id="cateNoTodo">
                 <li th:if="${todo.category == null}">
-                    <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 ps-1 ms-4">
+                    <ul class="btn-toggle-nav list-unstyled fw-normal ps-1 ms-4">
                         <input type="checkbox" th:id="${todo.id}" th:value="${todo.id}"  >
                         <label th:for="${todo.id}" th:text="${todo.name}"> 카테고리 없는 할일</label>
                         <i class="fa-regular fa-trash-can fa-sm i del"></i>

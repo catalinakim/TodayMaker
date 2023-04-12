@@ -99,4 +99,9 @@ public class TodoService {
         Todo todo = Todo.createTodo(user, category, dto.getName());
         return todoRepository.save(todo);
     }
+
+    public List<Todo> findSub(Long cateId) {
+        List<Todo> todos = todoRepository.findByCategoryId(cateId);
+        return todos;
+    }
 }

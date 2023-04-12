@@ -1,7 +1,9 @@
 package com.todaymaker.api;
 
+import com.todaymaker.domain.Category;
 import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
+import com.todaymaker.dto.CategoryDto;
 import com.todaymaker.service.TodoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -67,6 +69,13 @@ public class ApiTodoController {
     @PostMapping("/todos")
     public Todo addTodo(@RequestBody CreateTodoDto dto){
         return todoService.addTodo(dto);
+    }
+
+    @GetMapping("/categories/sub/{cateId}")
+    public List<Todo> subTodos(@PathVariable Long cateId) {  //하위카테고리의 할일
+        List<Todo> subTodoList = todoService.findSub(cateId);
+
+        return subTodoList;
     }
 
     @Data
