@@ -97,7 +97,7 @@ $(document).ready(function() {
                 const todo = data;
                 for (let i = 0; i < todo.length; i++) {
                     let subhtml = '<div>' +
-                        '<input type="checkbox" id="todayTodo' + todo[i]["id"]+ '" name="todayTodo' + todo[i]["id"]+ '" value="' + todo[i]["id"]+ '">\n' +
+                        '<input type="checkbox" id="todayTodo' + todo[i]["id"]+ '" value="' + todo[i]["id"]+ '">\n' +
                         '<label for="todayTodo' + todo[i]["id"]+ '"> ' + todo[i]["name"]+ '</label>' +
                         '<i class="fa-regular fa-square-minus fa-sm i today-minus" ></i> ' +
                         '<i class="fa-regular fa-star fa-sm i star"></i> </div>';
@@ -225,18 +225,21 @@ $(document).ready(function() {
     $(document).on('blur', '.todo input:text', function(e) {  //할일수정 후
         $(this).siblings('label').text($(this).val()).show();
         $(this).hide();
-        var text = $(this).val();
+        var newName = $(this).val();
         var id = $(this).siblings('input:checkbox').val();
         $.ajax({
             url: '/todos/'+id,
             type: 'PUT',
-            data: JSON.stringify({name: text}),
+            data: JSON.stringify({name: newName}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function(res) {
                 if(id == res){
                     $("#info").fadeIn();
                     $("#info").fadeOut();
+                    if(todayTodoIds.includes(id)){
+                        $("#todayList > div > input:checkbox[value="+id+"]").next().text(newName);
+                    }
                 }
             }
         });
