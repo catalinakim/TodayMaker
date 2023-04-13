@@ -102,6 +102,7 @@ $(document).ready(function() {
                         '<i class="fa-regular fa-square-minus fa-sm i today-minus" ></i> ' +
                         '<i class="fa-regular fa-star fa-sm i star"></i> </div>';
                     $("#todayList").append(subhtml);
+                    todayTodoIds.push(todo[i].id+"");
                 }
                 addTodayTodosListener();
             }
@@ -135,19 +136,20 @@ $(document).ready(function() {
         }
     });
     $(document).on("click", ".today-minus", function(){  //오늘할일에서 제외 클릭시
-        var removeFromToday = $(this).prev().prev().val();
+        var id = $(this).prev().prev().val();
         $.ajax({
             url: '/todos/today',
             type: 'DELETE',
-            data: removeFromToday,
+            data: id,
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             context: this,
             success: function (data) {
-                if(data == removeFromToday){
+                if(data == id){
                     $(this).parent().remove();
-                    $('input[value='+removeFromToday+']').prop('disabled', false);
-                    $('input[value='+removeFromToday+']').prop('checked', false);
+                    $('input[value='+id+']').prop('disabled', false);
+                    $('input[value='+id+']').prop('checked', false);
+                    todayTodoIds.splice(todayTodoIds.indexOf(id), 1);
                 }
             }
         });
@@ -277,7 +279,7 @@ $(document).ready(function() {
         });
     });
     $(document).on('click','i.del',function (){ //할일 삭제
-        var id = $(this).siblings('input:checkbox').attr('id');
+        var id = $(this).siblings('input:checkbox').val();
         var parent = $(this).parent();
         $.ajax({
             url: '/todos',
@@ -288,7 +290,10 @@ $(document).ready(function() {
             success: function(data) {
                 if(data == id){
                     parent.remove();
-                    $("#today input[type='checkbox'][value="+id+"]").parent().remove();
+                    if(todayTodoIds.includes(id)){
+                        $("#today input[type='checkbox'][value="+id+"]").parent().remove();
+                        todayTodoIds.splice(todayTodoIds.indexOf(id), 1);
+                    }
                 }
             }
         })
