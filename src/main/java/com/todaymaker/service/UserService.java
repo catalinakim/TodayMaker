@@ -21,4 +21,9 @@ public class UserService {
     public User findUser(String loginId) {
         return (User) userJpaRepository.findByLoginId(loginId);
     }
+
+    @Transactional
+    public User save(User user) {
+        return userJpaRepository.save(user);
+    }
 }

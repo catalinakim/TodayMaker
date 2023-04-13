@@ -3,6 +3,8 @@ package com.todaymaker.domain;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -18,13 +20,19 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
     private String loginId;
+
+    @NotBlank
     private String password;
 
     @OneToMany(mappedBy = "user")
     private List<Todo> todos = new ArrayList<>();
 
+    //@NotBlank(message = "이메일을 입력하세요.")
+    @Email
     private String email;
+
     private char joinType;
     private boolean verify;
     private boolean isDeleted;

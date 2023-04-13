@@ -2,15 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="utf-8">
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
   <link th:href="@{/css/bootstrap.min.css}"
         href="../css/bootstrap.min.css" rel="stylesheet">
   <style>
     .container {
       max-width: 560px;
     }
-    .field-error {
+    .field-error, .error {
       border-color: #dc3545;
       color: #dc3545;
+    }
+    .part {
+      margin-bottom: 1rem;
     }
   </style>
 </head>
@@ -20,25 +24,30 @@
     <h2>회원 가입</h2>
   </div>
   <h4 class="mb-3">회원 정보 입력</h4>
-  <form action="" th:action th:object="${user}" method="post">
+  <form action="" th:action th:object="${user}" method="post" onsubmit="return checkEarly(this)">
     <div th:if="${#fields.hasGlobalErrors()}">
       <p class="field-error" th:each="err : ${#fields.globalErrors()}"
          th:text="${err}">전체 오류 메시지</p>
     </div>
-    <div>
+    <div class="part">
       <label for="loginId">로그인 ID</label>
       <input type="text" id="loginId" th:field="*{loginId}" class="form-control" th:errorclass="field-error">
-      <div class="field-error" th:errors="*{loginId}" />
+      <div class="field-error" th:errors="*{loginId}"></div>
     </div>
-    <div>
+    <div class="part">
       <label for="password">비밀번호</label>
       <input type="password" id="password" th:field="*{password}" class="form-control" th:errorclass="field-error">
-      <div class="field-error" th:errors="*{password}" />
+      <div class="field-error" th:errors="*{password}"></div>
     </div>
-    <div>
+    <div class="part">
+      <label for="password2">비밀번호 확인</label>
+      <input type="password" id="password2" class="form-control">
+      <div class="error" id="passwordError"></div>
+    </div>
+    <div class="part">
       <label for="email">이메일</label>
       <input type="text" id="email" th:field="*{email}" class="form-control" th:errorclass="field-error">
-      <div class="field-error" th:errors="*{email}" />
+      <div class="field-error" th:errors="*{email}"></div>
     </div>
     <hr class="my-4">
     <div class="row">
@@ -56,3 +65,29 @@
 </div> <!-- /container -->
 </body>
 </html>
+<script type="text/javascript">
+  function checkEarly(form){
+    var pass2 = form.password2.value.trim();
+    if( pass2 === "" ){
+      $("#passwordError").text("비밀번호 확인 입력필수");
+      $("#password2").focus();
+      return false;
+    }
+  }
+  $(document).ready(function() {
+    $("#password2").blur(function() {
+      if( $("#password2").val().trim() === "" ){
+        $("#passwordError").text("비밀번호 확인 입력필수");
+        $("#password2").focus();
+        return false;
+      }
+      if($("#password").val() != $("#password2").val()) {
+        $("#passwordError").text("비밀번호 불일치");
+        return false;
+      }else{
+        $("#passwordError").text("");
+      }
+    });
+
+  });
+</script>
