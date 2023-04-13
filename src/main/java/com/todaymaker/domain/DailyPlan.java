@@ -1,6 +1,6 @@
 package com.todaymaker.domain;
 
-import lombok.AccessLevel;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,4 +25,13 @@ public class DailyPlan {
 
     private boolean done;
 
+    private boolean important;
+
+    @Data
+    public static class TodayImp{
+        private Long todoId;
+        private boolean important;
+    }
 }
+
+

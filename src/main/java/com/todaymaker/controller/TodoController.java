@@ -1,10 +1,12 @@
 package com.todaymaker.controller;
 
 import com.todaymaker.domain.Category;
+import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
 import com.todaymaker.domain.User;
 import com.todaymaker.dto.TodoCreateDto;
 import com.todaymaker.service.CategoryService;
+import com.todaymaker.service.DailyPlanService;
 import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
 import lombok.Data;
@@ -34,6 +36,7 @@ public class TodoController {
     private final CategoryService categoryService;
     private final TodoService todoService;
     private final UserService userService;
+    private final DailyPlanService dailyPlanService;
 
     @GetMapping("/")
     public String home() {
@@ -86,9 +89,11 @@ public class TodoController {
         List<Todo> noCateTodos = todoService.findNoCateTodos();
         model.addAttribute("noCateTodos", noCateTodos);
 
-
         List<Todo> todayTodos = todoService.getTodayTodos();
         model.addAttribute("todayTodos", todayTodos);
+
+        List<DailyPlan.TodayImp> todayImportantList = dailyPlanService.getImpList();
+        model.addAttribute("todays", todayImportantList);
 
         return "todo/todos";
     }

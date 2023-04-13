@@ -30,6 +30,7 @@ public class Todo {
 
     private String name;
 
+
     //==연관관계 메서드==//
     public void setUser(User user) {
         this.user = user;

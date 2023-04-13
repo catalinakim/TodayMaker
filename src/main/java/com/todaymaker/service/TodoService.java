@@ -68,7 +68,6 @@ public class TodoService {
     @Transactional(readOnly = true)
     public List<Todo> getTodayTodos() {
         List<DailyPlan> todays = dailyPlanRepository.findTodoIdByDayEquals(LocalDate.now());
-        System.out.println(todays.size());
         List<Todo> todayTodos = new ArrayList<>();
         for (DailyPlan todo : todays) {
             Optional<Todo> todayTodo = todoRepository.findById(todo.getTodoId());
@@ -76,7 +75,6 @@ public class TodoService {
                 //return null;
             }else{
                 todayTodos.add(todayTodo.get()); //unwrap Optional
-                System.out.println(todayTodo.get().getId() + todayTodo.get().getName());
             }
 
         }

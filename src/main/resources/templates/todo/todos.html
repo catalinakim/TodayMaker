@@ -7,10 +7,12 @@
 </head>
 <script th:inline="javascript">
     let getSubCategories = {};
+    let todaysImp = /*[[${todays}]]*/;
     /*[# th:each="cate : ${categories}"]*/
         var key = /*[[${cate.id}]]*/;
         getSubCategories[key] = false;
     /*[/]*/
+    console.log(todaysImp);
 </script>
 <!--/*-->
 <script type="text/javascript">

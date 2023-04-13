@@ -52,9 +52,10 @@
     color: #c0c0c0; /*#a3a3a3;*/
     margin-top:12px;
     margin-right: 5px;
+    cursor: pointer;
 }
 .star:hover{
-    cursor: default;
+    cursor: pointer;
 }
 .star-on {
     color: #e1b500;

@@ -74,9 +74,20 @@ function todayTodoCheck(){ //오늘할일 중 카테고리없는 할일 checked 
         }
     });
 }
+function todayImportantOn(){
+    $('#todayList input:checkbox').each(function() {
+        let todoId = $(this).val();
+        let result = todaysImp.find(obj => obj.todoId === parseInt(todoId));
+        if(result != undefined && result.important){
+            $(this).siblings('i.star').removeClass( "fa-regular" );
+            $(this).siblings('i.star').addClass( "star-on fa-solid" );
+        }
+    });
+}
 $(document).ready(function() {
     getTodayTodoIds();
     todayTodoCheck();
+    todayImportantOn();
     addTodayTodosListener();
 
     $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
@@ -324,14 +335,37 @@ $(document).ready(function() {
         })
     });
     $(document).on('click','i.star',function (){
+        var todoId = $(this).siblings('input:checkbox').val();
         if($(this).hasClass('star-on')) {
-            $( this ).removeClass( "star-on fa-solid" );
-            $( this ).addClass( "fa-regular" );
-            //중요 ajax로 저장
+            $.ajax({
+                url: '/today',
+                type: 'PUT',
+                data: JSON.stringify({todoId: todoId, important: false}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                context: this,
+                success: function(res) {
+                    if(todoId == res){
+                        $( this ).removeClass( "star-on fa-solid" );
+                        $( this ).addClass( "fa-regular" );
+                    }
+                }
+            });
         } else {
-            $( this ).removeClass( "fa-regular" );
-            $( this ).addClass( "star-on fa-solid" );
-            //중요해제 ajax
+            $.ajax({
+                url: '/today',
+                type: 'PUT',
+                data: JSON.stringify({todoId: todoId, important: true}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                context: this,
+                success: function(res) {
+                    if(todoId == res){
+                        $( this ).removeClass( "fa-regular" );
+                        $( this ).addClass( "star-on fa-solid" );
+                    }
+                }
+            });
         }
     });
 });

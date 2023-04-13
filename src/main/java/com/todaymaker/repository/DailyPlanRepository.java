@@ -14,4 +14,8 @@ public interface DailyPlanRepository extends JpaRepository<DailyPlan, Long> {
     List<DailyPlan> findTodoIdByDayEquals(LocalDate now); //List<Long>
 
     void deleteByTodoId(Long id);
+
+    DailyPlan findByTodoIdAndDayEquals(Long todoId, LocalDate now);
+
+    List<DailyPlan> findByDay(LocalDate now);
 }
