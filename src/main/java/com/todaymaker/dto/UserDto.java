@@ -3,15 +3,16 @@ package com.todaymaker.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Data
 @AllArgsConstructor
 public class UserDto {
 
-    @NotEmpty
+    @NotBlank
     private String loginId;
 
-    @NotEmpty
+    @NotBlank
     private String password;
 }

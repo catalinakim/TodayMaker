@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,13 +34,19 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             return "user/join";
         }
+        try{
+            userService.duplicate(user.getLoginId());
+        }catch (IllegalStateException e){
+            bindingResult.addError(new FieldError("userDto", "loginId", "사용중인 ID"));
+            return "user/join";
+        }
         user.initUser();
         log.info(String.valueOf(user.getJoinType()));
         log.info(user.getCreatedAt());
 
         User savedUser = userService.save(user);
         log.info(Long.toString(savedUser.getId()));
-        return "user/login";
+        return "redirect:/login";
     }
     //로그인 페이지
     @GetMapping("/login")
@@ -48,7 +55,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute UserDto userDto, BindingResult bindingResult, HttpServletRequest req) {
+    public String login(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, HttpServletRequest req) {
         if(bindingResult.hasErrors()){
             return "user/login";
         }
