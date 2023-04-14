@@ -9,7 +9,6 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
-//public interface UserRepository extends JpaRepository<User, Long> {
 public class UserJpaRepository {
 
     private final EntityManager em;
