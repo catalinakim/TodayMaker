@@ -19,16 +19,23 @@
             <a class="active" href="#"><i class="fa fa-home fa-inverse"></i></a>
 
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
-<!--                <li><a href="#" class="nav-link px-2 text-white">Features</a></li>-->
-<!--                <li><a href="#" class="nav-link px-2 text-white">About</a></li>-->
+                <li><a href="/" class="nav-link px-2 text-secondary">Home</a></li>
+                <li><a href="/todos" class="nav-link px-2 text-white">할일관리</a></li>
             </ul>
 
-            <div class="text-end">
-                <button type="button" class="btn btn-outline-light me-2"
-                        th:onclick="|location.href='@{/login}'|" onclick="location.href='login.html'">Login</button>
-                <button type="button" class="btn btn-warning"
-                        th:onclick="|location.href='@{/join}'|">Sign-up</button>
+            <div class="d-flex text-end">
+                <div class="d-flex align-items-center" th:if="${session.loginId != null}">
+                    <span class="me-2" th:text="|${session.loginId}님|">로그인 유저 ID</span>
+                    <form th:action="@{/logout}" method="post">
+                        <button type="submit" class="btn btn-outline-light me-2">Logout</button>
+                    </form>
+                </div>
+                <div th:unless="${session.loginId != null}">
+                    <button type="button" class="btn btn-outline-light me-2"
+                            th:onclick="|location.href='@{/login}'|" onclick="location.href='login.html'">Login</button>
+                    <button type="button" class="btn btn-warning"
+                            th:onclick="|location.href='@{/join}'|">Sign-up</button>
+                </div>
             </div>
         </div>
     </div>

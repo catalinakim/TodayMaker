@@ -9,10 +9,8 @@ import com.todaymaker.service.CategoryService;
 import com.todaymaker.service.DailyPlanService;
 import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.aop.support.AopUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -20,13 +18,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 
 @Slf4j
 @Controller
@@ -39,19 +38,26 @@ public class TodoController {
     private final DailyPlanService dailyPlanService;
 
     @GetMapping("/")
-    public String home() {
-
-        return "index";
+    public String home(HttpServletRequest req, Model model) {
+        HttpSession session = req.getSession(false);
+        if(session == null){
+            return "index";
+        }
+        String loginId = (String) session.getAttribute("loginId");
+        if(loginId == null){
+            return "index";
+        }
+        return "redirect:/todos";
     }
 
     @GetMapping("/todo")
-    public String todoPage(Model model) {
-        User user = userService.findTester();
+    public String todoPage(@SessionAttribute(name="userId", required = false) Long userId, Model model) {
+        User user = userService.findUser(userId);  //로그인 유저로 변경
         TodoCreateDto todo = new TodoCreateDto();
         todo.setUser(user);
         model.addAttribute("todo", todo);
         log.info("뷰에 전달된 user id: {}", user.getId());
-        List<Category> categories = categoryService.findCategories();
+        List<Category> categories = categoryService.findCategories(user.getId());
         model.addAttribute("categories", categories);
 
         return "todo/todoForm";
@@ -79,12 +85,20 @@ public class TodoController {
 
     //할일목록
     @GetMapping(value = "/todos")
-    public String list(Model model) {
-        List<Category> categories = categoryService.findCategories();
-        model.addAttribute("categories", categories);
+    public String list(HttpServletRequest req, Model model) {
+        HttpSession session = req.getSession(false);
+        if(session != null){
+            String loginId = (String) session.getAttribute("loginId");
+            Long userId = (Long) session.getAttribute("userId");
+            if (loginId != null) {
+                model.addAttribute("loginId", loginId);
+            }
+            List<Category> categories = categoryService.findCategories(userId);
+            model.addAttribute("categories", categories);
+        }
         model.addAttribute("date", LocalDateTime.now());
 
-        List<Todo> todos = todoService.findTodos();
+        //List<Todo> todos = todoService.findTodos();
         //model.addAttribute("todos", todos);
         List<Todo> noCateTodos = todoService.findNoCateTodos();
         model.addAttribute("noCateTodos", noCateTodos);
@@ -94,6 +108,7 @@ public class TodoController {
 
         List<DailyPlan.TodayImp> todayImportantList = dailyPlanService.getImpList();
         model.addAttribute("todays", todayImportantList);
+
 
         return "todo/todos";
     }

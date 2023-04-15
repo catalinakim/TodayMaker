@@ -26,8 +26,10 @@ public class CategoryService {
         categoryJpaRepository.save(category);
     }
 
-    public List<Category> findCategories() {
-        return categoryJpaRepository.findAll();
+    public List<Category> findCategories(Long userId) {
+        //return categoryJpaRepository.findAll();
+        //로그인 유저의 카테고리 리스트
+        return categoryRepository.findByUser(userId);
     }
 
     public List<Category> findRootCategories() {

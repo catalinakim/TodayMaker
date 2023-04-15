@@ -65,7 +65,8 @@ public class UserController {
             return "user/login";
         }
         HttpSession session = req.getSession();  //session id생성
-        session.setAttribute("loginUser", loginUser);
+        session.setAttribute("loginId", loginUser.getLoginId());
+        session.setAttribute("userId", loginUser.getId());
 
         return "redirect:/";
 

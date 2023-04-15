@@ -33,6 +33,8 @@ public class Category {
         this.name = name;
     }
 
+    public Long userId;
+
     public void setParent(Category category) {
         this.parent = category;
         parent.getChild().add(this);

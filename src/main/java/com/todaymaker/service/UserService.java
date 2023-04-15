@@ -17,16 +17,16 @@ public class UserService {
     private final UserJpaRepository userJpaRepository;
     private final UserRepository userRepository;
 
-    //회원 조회
     public User findTester() {
         return userJpaRepository.findOne(1L);
     }
 
-    public User findUser(String loginId) {  //ID중복확인
-        return (User) userJpaRepository.findByLoginId(loginId);
+    public User findUser(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        return user;
     }
 
-    public void duplicate(String loginId) {
+    public void duplicate(String loginId) {  //ID중복확인
         Optional<User> findUser = userRepository.findByLoginId(loginId);
         if(!findUser.isEmpty()){
             throw new IllegalStateException("사용중인 ID");

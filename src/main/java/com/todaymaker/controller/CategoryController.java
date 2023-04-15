@@ -13,6 +13,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @GetMapping("/category")
-    public String categoryPage(Model model) {
+    public String categoryPage(@SessionAttribute(name="userId", required = false) Long userId, Model model) {
         //상위 카테고리 목록 전달(parentId=null)
         //1차 개발목표: 최상단 카테고리만 전달(depth:1)
         //List<Category> categories = categoryService.findCategories();
