@@ -64,10 +64,19 @@ public class UserController {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
             return "user/login";
         }
-        HttpSession session = req.getSession();
+        HttpSession session = req.getSession();  //session id생성
         session.setAttribute("loginUser", loginUser);
 
         return "redirect:/";
 
+    }
+
+    @PostMapping("/logout")
+    public String logout(HttpServletRequest req){
+        HttpSession session = req.getSession(false);
+        if(session != null){
+            session.invalidate();
+        }
+        return "redirect:/";
     }
 }
