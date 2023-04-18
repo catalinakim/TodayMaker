@@ -47,13 +47,6 @@ public class ApiTodoController {
         return todoId;
     }
 
-    @GetMapping("/todos/today")
-    public List<Todo> getTodayTodo() {
-        List<Todo> todayTodos = todoService.getTodayTodos();
-
-        return todayTodos;
-    }
-
     @PutMapping("/todos/{id}")
     public Long editTodo(@PathVariable Long id, @RequestBody UpdateTodoDto dto){
         todoService.update(id, dto.getName());

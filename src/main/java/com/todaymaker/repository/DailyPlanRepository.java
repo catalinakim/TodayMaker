@@ -1,6 +1,7 @@
 package com.todaymaker.repository;
 
 import com.todaymaker.domain.DailyPlan;
+import com.todaymaker.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -18,4 +19,6 @@ public interface DailyPlanRepository extends JpaRepository<DailyPlan, Long> {
     DailyPlan findByTodoIdAndDayEquals(Long todoId, LocalDate now);
 
     List<DailyPlan> findByDay(LocalDate now);
+
+    List<DailyPlan> findByUserAndDay(User user, LocalDate now);
 }

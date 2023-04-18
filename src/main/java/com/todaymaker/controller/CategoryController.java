@@ -28,7 +28,7 @@ public class CategoryController {
         //상위 카테고리 목록 전달(parentId=null)
         //1차 개발목표: 최상단 카테고리만 전달(depth:1)
         //List<Category> categories = categoryService.findCategories();
-        List<Category> categories = categoryService.findRootCategories();
+        List<Category> categories = categoryService.findRootCategories(userId);
         model.addAttribute("categories", categories);
         //빈 카테고리 Dto를 전달
         CategoryDto categoryDto = new CategoryDto();

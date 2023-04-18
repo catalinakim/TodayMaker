@@ -1,5 +1,6 @@
 package com.todaymaker.controller;
 
+import com.todaymaker.Login;
 import com.todaymaker.domain.Category;
 import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
@@ -51,12 +52,12 @@ public class TodoController {
     }
 
     @GetMapping("/todo")
-    public String todoPage(@SessionAttribute(name="userId", required = false) Long userId, Model model) {
-        User user = userService.findUser(userId);  //로그인 유저로 변경
+    public String todoPage(@Login Long userId, Model model) {
+        User user = userService.findUser(userId);
         TodoCreateDto todo = new TodoCreateDto();
         todo.setUser(user);
         model.addAttribute("todo", todo);
-        log.info("뷰에 전달된 user id: {}", user.getId());
+
         List<Category> categories = categoryService.findCategories(user.getId());
         model.addAttribute("categories", categories);
 
@@ -86,28 +87,28 @@ public class TodoController {
     //할일목록
     @GetMapping(value = "/todos")
     public String list(HttpServletRequest req, Model model) {
+        //HttpServletRequest에서 세션정보 가져오는 방식
         HttpSession session = req.getSession(false);
         if(session != null){
             String loginId = (String) session.getAttribute("loginId");
             Long userId = (Long) session.getAttribute("userId");
+
             if (loginId != null) {
                 model.addAttribute("loginId", loginId);
             }
             List<Category> categories = categoryService.findCategories(userId);
             model.addAttribute("categories", categories);
+
+            List<Todo> noCateTodos = todoService.findNoCateTodos(userId);
+            model.addAttribute("noCateTodos", noCateTodos);
+
+            List<Todo> todayTodos = todoService.getTodayTodos(userId);
+            model.addAttribute("todayTodos", todayTodos);
         }
         model.addAttribute("date", LocalDateTime.now());
 
-        //List<Todo> todos = todoService.findTodos();
-        //model.addAttribute("todos", todos);
-        List<Todo> noCateTodos = todoService.findNoCateTodos();
-        model.addAttribute("noCateTodos", noCateTodos);
-
-        List<Todo> todayTodos = todoService.getTodayTodos();
-        model.addAttribute("todayTodos", todayTodos);
-
-        List<DailyPlan.TodayImp> todayImportantList = dailyPlanService.getImpList();
-        model.addAttribute("todays", todayImportantList);
+        List<DailyPlan.Imporant> importantList = dailyPlanService.getImpList();
+        model.addAttribute("todays", importantList);
 
 
         return "todo/todos";

@@ -20,9 +20,12 @@ public class CategoryDto {
     @JsonIgnore
     private Category parent;
 
+    private Long userId;
+
     public CategoryDto(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.parent = category.getParent();
+        this.userId = category.getUserId();
     }
 }

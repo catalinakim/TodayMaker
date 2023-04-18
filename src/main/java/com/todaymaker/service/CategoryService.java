@@ -29,11 +29,13 @@ public class CategoryService {
     public List<Category> findCategories(Long userId) {
         //return categoryJpaRepository.findAll();
         //로그인 유저의 카테고리 리스트
-        return categoryRepository.findByUser(userId);
+        return categoryRepository.findByUserId(userId);
     }
 
-    public List<Category> findRootCategories() {
-        return categoryJpaRepository.findRootCategories();
+    public List<Category> findRootCategories(Long userId) {
+        //return categoryJpaRepository.findRootCategories();
+        //로그인 유저의 루트 카테고리
+        return categoryRepository.findByUserIdAndParentIsNull(userId);
     }
 
     public Category checkName(String name) {

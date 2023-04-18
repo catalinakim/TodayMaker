@@ -5,11 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
+
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
@@ -27,8 +26,11 @@ public class DailyPlan {
 
     private boolean important;
 
+    @ManyToOne(fetch = LAZY)
+    private User user;
+
     @Data
-    public static class TodayImp{
+    public static class Imporant{
         private Long todoId;
         private boolean important;
     }

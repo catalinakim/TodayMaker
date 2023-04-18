@@ -66,15 +66,16 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public List<Todo> getTodayTodos() {
-        List<DailyPlan> todays = dailyPlanRepository.findTodoIdByDayEquals(LocalDate.now());
+    public List<Todo> getTodayTodos(Long userId) {
+        User user = userJpaRepository.findOne(userId);
+        List<DailyPlan> todays = dailyPlanRepository.findByUserAndDay(user, LocalDate.now());
         List<Todo> todayTodos = new ArrayList<>();
         for (DailyPlan todo : todays) {
             Optional<Todo> todayTodo = todoRepository.findById(todo.getTodoId());
-            if(!todayTodo.isPresent()){  //삭제된 오늘할일
-                //return null;
+            if(todayTodo.isPresent()){
+                todayTodos.add(todayTodo.get());
             }else{
-                todayTodos.add(todayTodo.get()); //unwrap Optional
+                //unwrap Optional
             }
 
         }
@@ -103,8 +104,8 @@ public class TodoService {
         return todos;
     }
 
-    public List<Todo> findNoCateTodos() {
-        List<Todo> noCateTodos = todoRepository.findByCategoryIsNull();
+    public List<Todo> findNoCateTodos(Long userId) {
+        List<Todo> noCateTodos = todoRepository.findByUserIdAndCategoryIsNull(userId);
         return noCateTodos;
     }
 }
