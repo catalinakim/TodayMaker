@@ -56,10 +56,12 @@ public class ApiTodoController {
         return id;
     }
 
-    @DeleteMapping("/todos")
-    public Long deleteTodo(@RequestBody TodoDto todo){
-        todoService.deleteTodo(todo.getId());
-        return todo.getId();
+    @DeleteMapping("/todos/{id}")
+    public Long deleteTodo(@Login Long userId, @PathVariable Long id){
+        if(userId != null){
+            todoService.deleteTodo(id);
+        }
+        return id;
     }
 
     @PostMapping("/todos")

@@ -114,7 +114,6 @@ $(document).ready(function() {
             dataType: 'json',
             success: function (data) {
                 const row = data;
-                console.log(row);
                 for (let i = 0; i < row.length; i++) {
                     let subhtml = '<div id="today-each" class="d-flex">' +
                         '<input type="hidden" id="todo" value="'+row[i].id+'"/>' +
@@ -135,7 +134,7 @@ $(document).ready(function() {
                         '<i class="fa-regular fa-star fa-sm i star"></i>' +
                         '<i class="fa-regular fa-square-minus fa-sm i today-minus"></i> </div>';
                     $("#todayList").append(subhtml);
-                    todayTodoIds.push(todo[i].id+"");
+                    todayTodoIds.push(row[i].todoId+"");
                 }
                 addTodayTodosListener();
             }
@@ -264,7 +263,7 @@ $(document).ready(function() {
                     $("#info").fadeIn();
                     $("#info").fadeOut();
                     if(todayTodoIds.includes(id)){
-                        $("#todayList > div > input:checkbox[value="+id+"]").next().text(newName);
+                        $("#todayList input:checkbox[value="+id+"]").next('label').text(newName);
                     }
                 }
             }
@@ -306,11 +305,8 @@ $(document).ready(function() {
         var id = $(this).siblings('input:checkbox').val();
         var parent = $(this).parent();
         $.ajax({
-            url: '/todos',
+            url: '/todos/'+id,
             type: 'DELETE',
-            data: JSON.stringify({id: id}),
-            contentType: 'application/json; charset=utf-8',
-            dataType: 'json',
             success: function(data) {
                 if(data == id){
                     parent.remove();
@@ -371,7 +367,6 @@ $(document).ready(function() {
     });
 
     $(document).on('click', '.dropdown-menu a', function() {
-        console.log('드롭다운 a 클릭');
         var num = $(this).attr('value');
         var btnDiv = $(this).closest('#today-each').find('div#pri-btn-div');
         var clickTag = this;
