@@ -108,6 +108,25 @@ input[type=checkbox] {
     padding: 8px 5px;
     cursor: default;
     border-radius: 30%;
+    margin-right: auto;
+}
+.pa2{
+    padding: 8px 5px;
+    cursor: default;
+    border-radius: 30%;
+    margin-right: auto;
+    background-color: #be626b;
+    border-color: #be626b;
+    color: white;
+}
+.pa3{
+    padding: 8px 5px;
+    cursor: default;
+    border-radius: 30%;
+    margin-right: auto;
+    background-color: #b28185;
+    border-color: #b28185;
+    color: white;
 }
 label {
     padding-left: 3px;
@@ -138,4 +157,43 @@ label {
 #noCateZone ul{
     margin-left: 1.75rem;
     margin-bottom: 0.25rem;
+}
+/*우선순위 지정 드롭다운*/
+#today-each{
+    align-items:center;
+}
+#today-each label{
+    /*margin-right: auto;  !*오른쪽 여백 최대*!*/
+}
+#pri-btn-div{
+    display: inline-block;
+    margin: 0 auto 0 20px;
+    padding: 0;
+    font-size: 0.5rem;
+    border: none;
+}
+#pri-div {
+    margin: 0px 5px 0px 0px;
+    padding: 0;
+    border: none;
+}
+#dropdownMenu {
+    padding: 0rem 0.1rem;
+    margin: 0;
+    background-color: white;
+    color : #c0c0c0;
+    border: none;
+}
+#pri-div ul {
+    min-width: 1.75rem;
+    width: 1.75rem;
+}
+.dropdown-item {
+    width: 1.7rem;
+    padding: 0.25rem 10px;
+    text-align: center;
+    color: indianred;
+}
+#todayList .i {
+    margin-top: 0px;
 }

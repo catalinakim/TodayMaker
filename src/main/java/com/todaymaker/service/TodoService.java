@@ -45,41 +45,39 @@ public class TodoService {
     }
     @Transactional
     public List<Todo> saveTodoToday(List<Long> todoIds) {
-        List<DailyPlan> todosToday = new ArrayList<>();
+        List<DailyPlan> todayList = new ArrayList<>();
         List<Todo> todos = new ArrayList<>();
         for (Long todoId : todoIds) {
             DailyPlan dailyPlan = new DailyPlan();
+            Todo todo = todoRepository.findById(todoId).get();
             dailyPlan.setDay(LocalDate.now());
             dailyPlan.setTodoId(todoId);
-            todosToday.add(dailyPlan);
-            Todo todo = todoRepository.findById(todoId).get();
+            dailyPlan.setUser(todo.getUser());
+            todayList.add(dailyPlan);
             todos.add(todo);
         }
-        List<DailyPlan> savedTodos = dailyPlanRepository.saveAll(todosToday);
+        List<DailyPlan> savedTodos = dailyPlanRepository.saveAll(todayList);
         return todos;
     }
     @Transactional
     public void removeFromToday(Long todoId) {
-    //public boolean removeFromToday(ApiTodoController.TodoDto todoDto) {
         dailyPlanRepository.deleteByTodoIdAndDayEquals(todoId, LocalDate.now());
         return;
     }
 
     @Transactional(readOnly = true)
-    public List<Todo> getTodayTodos(Long userId) {
+    public List<DailyPlan.TodayTodos> getTodayTodos(Long userId) {
         User user = userJpaRepository.findOne(userId);
         List<DailyPlan> todays = dailyPlanRepository.findByUserAndDay(user, LocalDate.now());
-        List<Todo> todayTodos = new ArrayList<>();
-        for (DailyPlan todo : todays) {
-            Optional<Todo> todayTodo = todoRepository.findById(todo.getTodoId());
-            if(todayTodo.isPresent()){
-                todayTodos.add(todayTodo.get());
-            }else{
-                //unwrap Optional
+        List<DailyPlan.TodayTodos> todayTodosDto = new ArrayList<>();
+        for (DailyPlan todayRow : todays) {
+            Todo todo = todoRepository.findById(todayRow.getTodoId()).orElse(null);
+            if(todo != null){
+                DailyPlan.TodayTodos each = new DailyPlan.TodayTodos(todayRow, todo);
+                todayTodosDto.add(each);
             }
-
         }
-        return todayTodos;
+        return todayTodosDto;
     }
     @Transactional
     public void update(Long id, String name) {

@@ -20,7 +20,6 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -86,30 +85,19 @@ public class TodoController {
 
     //할일목록
     @GetMapping(value = "/todos")
-    public String list(HttpServletRequest req, Model model) {
-        //HttpServletRequest에서 세션정보 가져오는 방식
-        HttpSession session = req.getSession(false);
-        if(session != null){
-            String loginId = (String) session.getAttribute("loginId");
-            Long userId = (Long) session.getAttribute("userId");
+    public String list(@Login Long userId, Model model) {
+        List<Category> categories = categoryService.findCategories(userId);
+        model.addAttribute("categories", categories);
 
-            if (loginId != null) {
-                model.addAttribute("loginId", loginId);
-            }
-            List<Category> categories = categoryService.findCategories(userId);
-            model.addAttribute("categories", categories);
+        List<Todo> noCateTodos = todoService.findNoCateTodos(userId);
+        model.addAttribute("noCateTodos", noCateTodos);
 
-            List<Todo> noCateTodos = todoService.findNoCateTodos(userId);
-            model.addAttribute("noCateTodos", noCateTodos);
+        List<DailyPlan.TodayTodos> todayTodos = todoService.getTodayTodos(userId);
+        model.addAttribute("todayTodos", todayTodos);
 
-            List<Todo> todayTodos = todoService.getTodayTodos(userId);
-            model.addAttribute("todayTodos", todayTodos);
-        }
-        model.addAttribute("date", LocalDateTime.now());
-
-        List<DailyPlan.Imporant> importantList = dailyPlanService.getImpList();
+        List<DailyPlan.Important> importantList = dailyPlanService.getImpList();
         model.addAttribute("todays", importantList);
-
+        model.addAttribute("date", LocalDateTime.now());
 
         return "todo/todos";
     }

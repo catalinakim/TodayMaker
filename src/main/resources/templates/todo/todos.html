@@ -67,12 +67,6 @@
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
-                        <ul class="list-unstyled ps-1 ms-4 mb-1 todo">
-                            <input type="checkbox" id="todo2" name="todo2" value="1">
-                            <label for="todo1">노렌더링 할일2</label>
-                            <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                            <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                        </ul>
                     </div>
                     <!--*/-->
                 </li>
@@ -108,27 +102,42 @@
             <span th:text="${#temporals.dayOfWeekNameShort(date)}"></span>
             <div id="today">
                 <ul id="todayList" class="btn-toggle-nav list-unstyled moveable" >
-                    <div th:each="tdTodo : ${todayTodos}" >
-                        <input type="checkbox" th:id="'todayTodo' + ${tdTodo.id}" th:value="${tdTodo.id}">
-                        <label th:for="todayTodo+${tdTodo.id}" th:text="${tdTodo.name}">할일</label>
-                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
-                        <i class="fa-regular fa-star fa-sm i star"></i>
+                    <div id="today-each" class="d-flex" th:each="row : ${todayTodos}" >
+                        <input type="hidden" th:value="${row.id}"/>
+                        <input type="checkbox" th:id="'todayTodo'+${row.todoId}" th:value="${row.todoId}">
+                        <label th:for="todayTodo+${row.todoId}" th:text="${row.name}">할일</label>
+                        <div id="pri-btn-div">
+                            <a class="btn btn-danger pa1" th:if="${row.priority == 1}">
+                                <i class="fa-solid fa-1 fa-xs" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn pa2" th:if="${row.priority == 2}">
+                                <i class="fa-solid fa-2 fa-xs" aria-hidden="true"></i>
+                            </a>
+                            <a class="btn pa3" th:if="${row.priority == 3}">
+                                <i class="fa-solid fa-3 fa-xs" aria-hidden="true"></i>
+                            </a>
+                        </div>
+                        <div class="dropdown" id="pri-div">
+                            <button class="btn btn-secondary " type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars fa-sm"></i>
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
+                                <a class="dropdown-item" href="#">1</a>
+                                <a class="dropdown-item" href="#">2</a>
+                                <a class="dropdown-item" href="#">3</a>
+                            </ul>
+                        </div>
+                            <i class="fa-solid fa-star fa-sm i star star-on" th:if="${row.important == true}"></i>
+                            <i class="fa-regular fa-star fa-sm i star" th:if="${row.important == false}"></i>
+                            <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
                     </div>
                     <!--/*-->
-                    <div draggable="true" style="border: 1px solid rgb(240, 165, 145);">
-                        <input type="checkbox" id="todayTodo3" value="3">
-                        <label for="todayTodo3">오늘 할일1</label>
-                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
-                        <i class="fa-regular fa-star fa-sm i star"></i>
-                        <a class="btn btn-danger pa1">
-                            <i class="fa-solid fa-1 fa-xs" aria-hidden="true"></i>
-                        </a>
-                    </div>
                     <!--*/-->
                 </ul>
             </div>
         </div>
     </div>
+
 </div>
 <div id="text">
 </div>

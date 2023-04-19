@@ -84,15 +84,19 @@ function todayImportantOn(){
         }
     });
 }
+function hidePriorityBtn(){
+    $('#today-each .pa1').hide();
+    $('#today-each .pa2').hide();
+    $('#today-each .pa3').hide();
+}
 $(document).ready(function() {
     getTodayTodoIds();
     todayTodoCheck();
+    // hidePriorityBtn();
     todayImportantOn();
     addTodayTodosListener();
 
-    $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
-
-    $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
+    $('#today-each').slice(0,3).css('border', '1px solid #f0a591');
 
     $("#add").click(function() {  //추가
         var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
@@ -196,9 +200,6 @@ $(document).ready(function() {
         let dropped = $(this).parent().children().eq(oldIndex).remove(); //oldIndex인 요소 삭제
         console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex);
 
-        if(newIndex == 0) {
-            $('#todayList div:nth-child(1) i:last-child').remove(); //1순위 숫자1 제거
-        }
         // insert the dropped items at new place
         if (newIndex < oldIndex) {
             target.before(dropped); //target 앞에 추가
@@ -207,16 +208,10 @@ $(document).ready(function() {
         }
         //3순위 border 컬러 갱신
         if(newIndex <= 2 || oldIndex <= 2){  //3순위 이하꺼를 옮기거나, 3순위 이하로 옮겨지면
-            $('#today ul div').slice(0,3).css('border', '1px solid #f0a591');
-            $('#today ul div').slice(3).css('border', '1px solid #ccc');
+            $('#today-each').slice(0,3).css('border', '1px solid #f0a591');
+            $('#today-each').slice(3).css('border', '1px solid #ccc');
         }
-        if(newIndex == 0 || oldIndex == 0) {  //0위치가 변경됬으면
-            $('#today ul div:nth-child(1)').append('<i class="fa-solid fa-1 fa-sm p1"></i>');
-        }
-        if(oldIndex == 0){  //기존 위치가 0이면
-            let todoNewIndex = newIndex + 1;
-            $('#todayList div:nth-child('+todoNewIndex+') i:last-child').remove();
-        }
+
     }
     function cancelDefault (e) {
         e.preventDefault();
@@ -366,6 +361,32 @@ $(document).ready(function() {
                     }
                 }
             });
+        }
+    });
+
+    var prioList = [];
+    // var prioList = [0, 0, 0]; //todoId나 dailyId를 저장
+    $('#pri-div ul').on('click', 'a', function() {
+        var idx = $(this).index();
+        var iconDiv = $(this).parent().parent().prev();
+        var visibleA = iconDiv.children('a:visible'); //해당 row의 현 visible
+        var index = iconDiv.children('a').index(visibleA);
+        console.log('index:'+index);
+        if (index >= 0) { //해당 row에 visible인게 있었으면 hide
+            iconDiv.children('a:eq('+index+')').hide();
+            delete prioList[prioList.indexOf(index)];
+        }
+
+        if (prioList.indexOf(idx) == -1) { //전체에서 사용안됬으면
+            iconDiv.children('a:eq('+idx+')').show();
+            prioList.push(idx);
+        }else{ //다른 row에서 해당 번호가 사용중이었으면
+            // var visibleRow = iconDiv.parent().parent().children('a.btn:visible');
+            // var rowIndex = iconDiv.parent().parent().children('a.btn').index(visibleRow);
+            // console.log('rowIndex:' + rowIndex);
+            //
+            // iconDiv.parent().parent().children('a.btn:eq('+rowIndex+')').hide();
+            // delete prioList[prioList.indexOf(idx)];
         }
     });
 });

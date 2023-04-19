@@ -29,10 +29,29 @@ public class DailyPlan {
     @ManyToOne(fetch = LAZY)
     private User user;
 
+    private int priority;
+
     @Data
-    public static class Imporant{
+    public static class Important{
         private Long todoId;
         private boolean important;
+    }
+
+    @Data
+    public static class TodayTodos {
+        private Long id;
+        private Long todoId;
+        private String name;
+        private boolean important;
+        private int priority;
+
+        public TodayTodos(DailyPlan daily, Todo todo) {
+            this.id = daily.getId();
+            this.todoId = todo.getId();
+            this.name = todo.getName();
+            this.important = daily.isImportant();
+            this.priority = daily.getPriority();
+        }
     }
 }
 

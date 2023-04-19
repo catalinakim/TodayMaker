@@ -23,11 +23,11 @@ public class DailyPlanService {
         return todoId;
     }
 
-    public List<DailyPlan.Imporant> getImpList() {
-        List<DailyPlan.Imporant> todays = new ArrayList<>();
+    public List<DailyPlan.Important> getImpList() {
+        List<DailyPlan.Important> todays = new ArrayList<>();
         List<DailyPlan> dailyPlans = dailyPlanRepository.findByDay(LocalDate.now());
         for (DailyPlan todo : dailyPlans) {
-            DailyPlan.Imporant today = new DailyPlan.Imporant();
+            DailyPlan.Important today = new DailyPlan.Important();
             today.setTodoId(todo.getTodoId());
             today.setImportant(todo.isImportant());
             todays.add(today);
