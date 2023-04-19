@@ -27,13 +27,13 @@
     <div>
       <label for="loginId">로그인 ID</label>
       <input type="text" id="loginId" th:field="*{loginId}" class="form-control"
-             th:errorclass="field-error">
+             th:errorclass="field-error" autofocus maxlength = "20">
       <div class="field-error" th:errors="*{loginId}" />
     </div>
     <div>
       <label for="password">비밀번호</label>
       <input type="password" id="password" th:field="*{password}"
-             class="form-control" th:errorclass="field-error">
+             class="form-control" th:errorclass="field-error" maxlength = "20">
       <div class="field-error" th:errors="*{password}" />
     </div>
     <hr class="my-4">

@@ -34,4 +34,11 @@ public class DailyPlanService {
         }
         return todays;
     }
+    @Transactional
+    public void setPriority(Long id, int priority) {
+        DailyPlan today = dailyPlanRepository.findById(id).orElse(null);
+        if(today != null){
+            today.changePriority(priority);
+        }
+    }
 }

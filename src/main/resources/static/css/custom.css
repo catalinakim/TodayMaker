@@ -109,6 +109,9 @@ input[type=checkbox] {
     cursor: default;
     border-radius: 30%;
     margin-right: auto;
+    background-color: #de1b1b;
+    border-color: #de1b1b;
+    color: white;
 }
 .pa2{
     padding: 8px 5px;
@@ -167,7 +170,7 @@ label {
 }
 #pri-btn-div{
     display: inline-block;
-    margin: 0 auto 0 20px;
+    margin: 0 auto 0 10px;
     padding: 0;
     font-size: 0.5rem;
     border: none;

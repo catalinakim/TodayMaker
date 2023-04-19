@@ -31,6 +31,10 @@ public class DailyPlan {
 
     private int priority;
 
+    public void changePriority(int num){
+        this.priority = num;
+    }
+
     @Data
     public static class Important{
         private Long todoId;

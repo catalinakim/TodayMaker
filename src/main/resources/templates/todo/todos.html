@@ -5,12 +5,12 @@
     <title>To do(Local)</title>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 </head>
-<script th:inline="javascript">
+<script th:inline="javascript" type="text/javascript">
     let getSubCategories = {};
     let todaysImp = /*[[${todays}]]*/;
     /*[# th:each="cate : ${categories}"]*/
-        var key = /*[[${cate.id}]]*/;
-        getSubCategories[key] = false;
+    var key = /*[[${cate.id}]]*/;
+    getSubCategories[key] = false;
     /*[/]*/
     console.log(todaysImp);
 </script>
@@ -18,9 +18,6 @@
 <script type="text/javascript">
     $(document).ready(function(){
         $("#header").load("../fragments/header.html");
-        $(document).on("click", ".sub-cate", function() {
-            let subCateId = $(this).attr('data-bs-target').substring(9);
-        });
     });
 </script><!--*/-->
 <body>
@@ -35,17 +32,15 @@
     <!--            버튼태그 타겟 data-bs-target="하위 div ID" -->
                     <div class="v-center cate">
                         <button th:field="${category.id}"  class="btn btn-toggle collapsed" data-bs-toggle="collapse"
-                                th:attr="data-bs-target='#cate'+${category.id}" th:text="${category.name}"
+                                th:attr="data-bs-target='#cate'+${category.id}" data-bs-target='#cate1' th:text="${category.name}"
                                 th:onclick="showSubCategories(this)" th:value="${category.id}" aria-expanded="false">
                                 상위카테고리
                         </button>
                         <i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>
                         <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
                     </div>
-                    <div class="collapse" th:id="'cate'+${category.id}" >
-                    </div>
-                    <!--/*-->
-                    <div class="collapse show" id="cate1" >
+                    <div class="collapse" th:id="'cate'+${category.id}" id="cate1">
+                        <!--/*-->
                         <div class="v-center cate">
                             <button class="btn btn-toggle collapsed sub-cate" data-bs-toggle="collapse" data-bs-target="#sub-cate1">
                                 하위카테고리
@@ -53,8 +48,8 @@
                             <i class="fa-regular fa-pen-to-square fa-sm cate-edit"></i>
                             <i class="fa-regular fa-trash-can fa-sm cate-del"></i>
                         </div>
-                        <div class="collapse show" id="sub-cate2">
-                            <ul class="list-unstyled sub-todo">
+                        <div class="collapse sub-todo" id="sub-cate1">
+                            <ul class="list-unstyled sub-todo todo">
                                 <input type="checkbox" id="todo53" value="53">
                                 <label for="todo53">하위카테고리의 할일</label>
                                 <i class="fa-regular fa-trash-can fa-sm i del"></i>
@@ -67,8 +62,8 @@
                             <i class="fa-regular fa-trash-can fa-sm i del"></i>
                             <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                         </ul>
+                        <!--*/-->
                     </div>
-                    <!--*/-->
                 </li>
             </ul>
             <div id="noCateZone">
@@ -79,14 +74,6 @@
                     <i class="fa-regular fa-trash-can fa-sm i del"></i>
                     <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
                 </ul>
-                <!--/*-->
-                <ul class="list-unstyled">
-                    <input type="checkbox" id="68" value="68">
-                    <label for="68">카테고리 없는 할일2</label>
-                    <i class="fa-regular fa-trash-can fa-sm i del"></i>
-                    <i class="fa-regular fa-pen-to-square fa-sm i edit"></i>
-                </ul>
-                <!--*/-->
             </div>
             <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/category'">카테고리 추가</button>
             <button type="button" class="btn btn-primary px-3 my-3" onclick="location.href='/todo'">할일 추가</button>
@@ -103,28 +90,23 @@
             <div id="today">
                 <ul id="todayList" class="btn-toggle-nav list-unstyled moveable" >
                     <div id="today-each" class="d-flex" th:each="row : ${todayTodos}" >
-                        <input type="hidden" th:value="${row.id}"/>
+                        <input type="hidden" id="todo" th:value="${row.id}"/>
+                        <input type="hidden" id="priority" th:value="${row.priority}" value="100"/>
                         <input type="checkbox" th:id="'todayTodo'+${row.todoId}" th:value="${row.todoId}">
                         <label th:for="todayTodo+${row.todoId}" th:text="${row.name}">할일</label>
                         <div id="pri-btn-div">
-                            <a class="btn btn-danger pa1" th:if="${row.priority == 1}">
-                                <i class="fa-solid fa-1 fa-xs" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn pa2" th:if="${row.priority == 2}">
-                                <i class="fa-solid fa-2 fa-xs" aria-hidden="true"></i>
-                            </a>
-                            <a class="btn pa3" th:if="${row.priority == 3}">
-                                <i class="fa-solid fa-3 fa-xs" aria-hidden="true"></i>
+                            <a th:if="${row.priority != 0}" class="btn" th:classappend="${row.priority == 1} ? 'pa1' : (${row.priority == 2} ? 'pa2' : 'pa3')">
+                                <i class="fa-solid fa-xs" th:classappend="${row.priority == 1} ? 'fa-1' : (${row.priority == 2} ? 'fa-2' : 'fa-3')"></i>
                             </a>
                         </div>
                         <div class="dropdown" id="pri-div">
                             <button class="btn btn-secondary " type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-bars fa-sm"></i>
                             </button>
-                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu">
-                                <a class="dropdown-item" href="#">1</a>
-                                <a class="dropdown-item" href="#">2</a>
-                                <a class="dropdown-item" href="#">3</a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" value=1>1</a>
+                                <a class="dropdown-item" value=2>2</a>
+                                <a class="dropdown-item" value=3>3</a>
                             </ul>
                         </div>
                             <i class="fa-solid fa-star fa-sm i star star-on" th:if="${row.important == true}"></i>
@@ -132,6 +114,44 @@
                             <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
                     </div>
                     <!--/*-->
+                    <div id="today-each" class="d-flex" draggable="true" style="border: 1px solid rgb(240, 165, 145);">
+                        <input type="hidden" id="todo" value="7">
+                        <input type="hidden" id="priority" value="0">
+                        <input type="checkbox" id="todayTodo7" value="7">
+                        <label for="todayTodo7">메일</label>
+                        <div id="pri-btn-div"><a class="btn pa2"> <i class="fa-solid fa-2 fa-xs"></i> </a></div>
+                        <div class="dropdown" id="pri-div">
+                            <button class="btn btn-secondary" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars fa-sm" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="">
+                                <a class="dropdown-item" value="1">1</a>
+                                <a class="dropdown-item" value="2">2</a>
+                                <a class="dropdown-item" value="3">3</a>
+                            </ul>
+                        </div>
+                        <i class="fa-solid fa-star fa-sm i star star-on"></i>
+                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
+                    </div>
+                    <div id="today-each" class="d-flex" draggable="true">
+                        <input type="hidden" id="todo" value="8">
+                        <input type="hidden" id="priority" value="0">
+                        <input type="checkbox" id="todayTodo8" value="8">
+                        <label for="todayTodo8">장보기</label>
+                        <div id="pri-btn-div"></div>
+                        <div class="dropdown" id="pri-div">
+                            <button class="btn btn-secondary" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-bars fa-sm" aria-hidden="true"></i>
+                            </button>
+                            <ul class="dropdown-menu" style="">
+                                <a class="dropdown-item" value="1">1</a>
+                                <a class="dropdown-item" value="2">2</a>
+                                <a class="dropdown-item" value="3">3</a>
+                            </ul>
+                        </div>
+                        <i class="fa-regular fa-star fa-sm i star"></i>
+                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
+                    </div>
                     <!--*/-->
                 </ul>
             </div>

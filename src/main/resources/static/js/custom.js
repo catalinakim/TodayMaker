@@ -89,6 +89,10 @@ function hidePriorityBtn(){
     $('#today-each .pa2').hide();
     $('#today-each .pa3').hide();
 }
+function getPriIconTag(num) {
+    var str = '<a class="btn pa' + num + '"> <i class="fa-solid fa-' + num + ' fa-xs"></i> </a>';
+    return str;
+}
 $(document).ready(function() {
     getTodayTodoIds();
     todayTodoCheck();
@@ -331,62 +335,58 @@ $(document).ready(function() {
     });
     $(document).on('click','i.star',function (){
         var todoId = $(this).siblings('input:checkbox').val();
-        if($(this).hasClass('star-on')) {
-            $.ajax({
-                url: '/today',
-                type: 'PUT',
-                data: JSON.stringify({todoId: todoId, important: false}),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                context: this,
-                success: function(res) {
-                    if(todoId == res){
+        $.ajax({
+            url: '/today',
+            type: 'PUT',
+            data: JSON.stringify({todoId: todoId, important: $(this).hasClass('star-on') ? false : true}),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            context: this,
+            success: function(res) {
+                if(todoId == res){
+                    if($(this).hasClass('star-on')) {
                         $( this ).removeClass( "star-on fa-solid" );
                         $( this ).addClass( "fa-regular" );
-                    }
-                }
-            });
-        } else {
-            $.ajax({
-                url: '/today',
-                type: 'PUT',
-                data: JSON.stringify({todoId: todoId, important: true}),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                context: this,
-                success: function(res) {
-                    if(todoId == res){
+                    }else{
                         $( this ).removeClass( "fa-regular" );
                         $( this ).addClass( "star-on fa-solid" );
                     }
                 }
-            });
-        }
+            }
+        });
     });
 
-    var prioList = [];
-    // var prioList = [0, 0, 0]; //todoId나 dailyId를 저장
-    $('#pri-div ul').on('click', 'a', function() {
-        var idx = $(this).index();
-        var iconDiv = $(this).parent().parent().prev();
-        var visibleA = iconDiv.children('a:visible'); //해당 row의 현 visible
-        var index = iconDiv.children('a').index(visibleA);
-        console.log('index:'+index);
-        if (index >= 0) { //해당 row에 visible인게 있었으면 hide
-            iconDiv.children('a:eq('+index+')').hide();
-            delete prioList[prioList.indexOf(index)];
+    $('.dropdown-menu').on('click', 'a', function() {
+        var num = $(this).attr('value');
+        var btnDiv = $(this).closest('#today-each').find('div#pri-btn-div');
+        var clickTag = this;
+        var AhadNum = $("ul#todayList").find("a.pa"+num);
+        var pastId = AhadNum.parent().siblings('input:hidden[id="todo"]').val();
+        console.log('pastId ', pastId);
+        if(pastId !== undefined){ //기존 애는 0으로 저장 후 hide
+            $.ajax({
+                url: '/today/priority',
+                type: 'PUT',
+                data: JSON.stringify({id: pastId, priority: 0}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function() {
+                    AhadNum.remove();
+                }
+            });
         }
-
-        if (prioList.indexOf(idx) == -1) { //전체에서 사용안됬으면
-            iconDiv.children('a:eq('+idx+')').show();
-            prioList.push(idx);
-        }else{ //다른 row에서 해당 번호가 사용중이었으면
-            // var visibleRow = iconDiv.parent().parent().children('a.btn:visible');
-            // var rowIndex = iconDiv.parent().parent().children('a.btn').index(visibleRow);
-            // console.log('rowIndex:' + rowIndex);
-            //
-            // iconDiv.parent().parent().children('a.btn:eq('+rowIndex+')').hide();
-            // delete prioList[prioList.indexOf(idx)];
-        }
+        var newId = $(clickTag).closest('#today-each').find('input:hidden[id="todo"]').val();
+        console.log('new id:', newId);
+        $.ajax({ //새로운 애는 우선순위 저장 후 html 대체
+            url: '/today/priority',
+            type: 'PUT',
+            data: JSON.stringify({id: newId, priority: num}),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function() {
+                var iconTag = getPriIconTag(num);
+                btnDiv.html(iconTag);  //해당 row 아이콘 넣기
+            }
+        });
     });
 });
