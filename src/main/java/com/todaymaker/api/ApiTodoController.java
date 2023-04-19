@@ -1,5 +1,6 @@
 package com.todaymaker.api;
 
+import com.todaymaker.Login;
 import com.todaymaker.domain.Category;
 import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
@@ -34,15 +35,17 @@ public class ApiTodoController {
     }
 
     @PostMapping("/todos/today")
-    public List<Todo> addTodo(@RequestBody List<Long> todoIds) {
-        List<Todo> savedTodos = todoService.saveTodoToday(todoIds);
+    public List<DailyPlan.TodayTodos> addTodo(@Login Long userId, @RequestBody List<Long> todoIds) {
+        List<DailyPlan.TodayTodos> savedTodosAtToday = todoService.saveTodoToday(userId, todoIds);
+        for (DailyPlan.TodayTodos todayTodos : savedTodosAtToday) {
+            System.out.println("daily row id = " + todayTodos.getId());
+        }
 
-        return savedTodos;
+        return savedTodosAtToday;
     }
 
     @DeleteMapping("/todos/today")
     public Long removeFromToday(@RequestBody Long todoId){
-    //public boolean removeFromToday(@RequestBody TodoDto todoDto){
         todoService.removeFromToday(todoId);
         return todoId;
     }

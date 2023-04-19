@@ -91,7 +91,7 @@
                 <ul id="todayList" class="btn-toggle-nav list-unstyled moveable" >
                     <div id="today-each" class="d-flex" th:each="row : ${todayTodos}" >
                         <input type="hidden" id="todo" th:value="${row.id}"/>
-                        <input type="hidden" id="priority" th:value="${row.priority}" value="100"/>
+                        <input type="hidden" id="priority" th:value="${row.priority}"/>
                         <input type="checkbox" th:id="'todayTodo'+${row.todoId}" th:value="${row.todoId}">
                         <label th:for="todayTodo+${row.todoId}" th:text="${row.name}">할일</label>
                         <div id="pri-btn-div">
@@ -109,49 +109,11 @@
                                 <a class="dropdown-item" value=3>3</a>
                             </ul>
                         </div>
-                            <i class="fa-solid fa-star fa-sm i star star-on" th:if="${row.important == true}"></i>
-                            <i class="fa-regular fa-star fa-sm i star" th:if="${row.important == false}"></i>
-                            <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
+                        <i class="fa-solid fa-star fa-sm i star star-on" th:if="${row.important == true}"></i>
+                        <i class="fa-regular fa-star fa-sm i star" th:if="${row.important == false}"></i>
+                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
                     </div>
                     <!--/*-->
-                    <div id="today-each" class="d-flex" draggable="true" style="border: 1px solid rgb(240, 165, 145);">
-                        <input type="hidden" id="todo" value="7">
-                        <input type="hidden" id="priority" value="0">
-                        <input type="checkbox" id="todayTodo7" value="7">
-                        <label for="todayTodo7">메일</label>
-                        <div id="pri-btn-div"><a class="btn pa2"> <i class="fa-solid fa-2 fa-xs"></i> </a></div>
-                        <div class="dropdown" id="pri-div">
-                            <button class="btn btn-secondary" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-bars fa-sm" aria-hidden="true"></i>
-                            </button>
-                            <ul class="dropdown-menu" style="">
-                                <a class="dropdown-item" value="1">1</a>
-                                <a class="dropdown-item" value="2">2</a>
-                                <a class="dropdown-item" value="3">3</a>
-                            </ul>
-                        </div>
-                        <i class="fa-solid fa-star fa-sm i star star-on"></i>
-                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
-                    </div>
-                    <div id="today-each" class="d-flex" draggable="true">
-                        <input type="hidden" id="todo" value="8">
-                        <input type="hidden" id="priority" value="0">
-                        <input type="checkbox" id="todayTodo8" value="8">
-                        <label for="todayTodo8">장보기</label>
-                        <div id="pri-btn-div"></div>
-                        <div class="dropdown" id="pri-div">
-                            <button class="btn btn-secondary" type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-bars fa-sm" aria-hidden="true"></i>
-                            </button>
-                            <ul class="dropdown-menu" style="">
-                                <a class="dropdown-item" value="1">1</a>
-                                <a class="dropdown-item" value="2">2</a>
-                                <a class="dropdown-item" value="3">3</a>
-                            </ul>
-                        </div>
-                        <i class="fa-regular fa-star fa-sm i star"></i>
-                        <i class="fa-regular fa-square-minus fa-sm i today-minus"></i>
-                    </div>
                     <!--*/-->
                 </ul>
             </div>

@@ -102,7 +102,7 @@ $(document).ready(function() {
 
     $('#today-each').slice(0,3).css('border', '1px solid #f0a591');
 
-    $("#add").click(function() {  //추가
+    $("#add").click(function() {  //오늘할일에 추가
         var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
             return this.value;
         }).get();
@@ -113,13 +113,27 @@ $(document).ready(function() {
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             success: function (data) {
-                const todo = data;
-                for (let i = 0; i < todo.length; i++) {
-                    let subhtml = '<div>' +
-                        '<input type="checkbox" id="todayTodo' + todo[i]["id"]+ '" value="' + todo[i]["id"]+ '">\n' +
-                        '<label for="todayTodo' + todo[i]["id"]+ '"> ' + todo[i]["name"]+ '</label>' +
-                        '<i class="fa-regular fa-square-minus fa-sm i today-minus" ></i> ' +
-                        '<i class="fa-regular fa-star fa-sm i star"></i> </div>';
+                const row = data;
+                console.log(row);
+                for (let i = 0; i < row.length; i++) {
+                    let subhtml = '<div id="today-each" class="d-flex">' +
+                        '<input type="hidden" id="todo" value="'+row[i].id+'"/>' +
+                        '<input type="hidden" id="priority" value="'+row[i].priority+'"/>' +
+                        '<input type="checkbox" id="todayTodo' + row[i].todoId+ '" value="' + row[i].todoId+ '">' +
+                        '<label for="todayTodo' + row[i].todoId+ '">' + row[i].name+ '</label>' +
+                        '<div id="pri-btn-div"></div>' +
+                        '<div class="dropdown" id="pri-div">' +
+                        '   <button class="btn btn-secondary " type="button" id="dropdownMenu" data-bs-toggle="dropdown" aria-expanded="false">\n' +
+                        '       <i class="fas fa-bars fa-sm"></i>' +
+                        '   </button>' +
+                        '   <ul class="dropdown-menu">' +
+                        '       <a class="dropdown-item" value=1>1</a>' +
+                        '       <a class="dropdown-item" value=2>2</a>' +
+                        '       <a class="dropdown-item" value=3>3</a>' +
+                        '   </ul>' +
+                        '</div>' +
+                        '<i class="fa-regular fa-star fa-sm i star"></i>' +
+                        '<i class="fa-regular fa-square-minus fa-sm i today-minus"></i> </div>';
                     $("#todayList").append(subhtml);
                     todayTodoIds.push(todo[i].id+"");
                 }
@@ -155,7 +169,7 @@ $(document).ready(function() {
         }
     });
     $(document).on("click", ".today-minus", function(){  //오늘할일에서 제외 클릭시
-        var id = $(this).prev().prev().val();
+        var id = $(this).siblings('input:checkbox').val();
         $.ajax({
             url: '/todos/today',
             type: 'DELETE',
@@ -356,7 +370,8 @@ $(document).ready(function() {
         });
     });
 
-    $('.dropdown-menu').on('click', 'a', function() {
+    $(document).on('click', '.dropdown-menu a', function() {
+        console.log('드롭다운 a 클릭');
         var num = $(this).attr('value');
         var btnDiv = $(this).closest('#today-each').find('div#pri-btn-div');
         var clickTag = this;

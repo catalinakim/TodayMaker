@@ -44,20 +44,20 @@ public class TodoService {
         return todosInCategory;
     }
     @Transactional
-    public List<Todo> saveTodoToday(List<Long> todoIds) {
-        List<DailyPlan> todayList = new ArrayList<>();
-        List<Todo> todos = new ArrayList<>();
+    public List<DailyPlan.TodayTodos> saveTodoToday(Long userId, List<Long> todoIds) {
+        User user = userJpaRepository.findOne(userId);
+        List<DailyPlan.TodayTodos> savedList = new ArrayList<>();
+        List<DailyPlan> willSave = new ArrayList<>();
         for (Long todoId : todoIds) {
-            DailyPlan dailyPlan = new DailyPlan();
-            Todo todo = todoRepository.findById(todoId).get();
-            dailyPlan.setDay(LocalDate.now());
-            dailyPlan.setTodoId(todoId);
-            dailyPlan.setUser(todo.getUser());
-            todayList.add(dailyPlan);
-            todos.add(todo);
+            Todo todo = todoRepository.findById(todoId).orElse(null);
+            if(todo != null){
+                DailyPlan dailyPlan = DailyPlan.createDailyTodo(user, todoId);
+                willSave.add(dailyPlan);
+                dailyPlanRepository.save(dailyPlan);
+                savedList.add(new DailyPlan.TodayTodos(dailyPlan, todo));
+            }
         }
-        List<DailyPlan> savedTodos = dailyPlanRepository.saveAll(todayList);
-        return todos;
+        return savedList;
     }
     @Transactional
     public void removeFromToday(Long todoId) {

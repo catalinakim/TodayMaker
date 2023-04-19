@@ -35,6 +35,15 @@ public class DailyPlan {
         this.priority = num;
     }
 
+    //==생성 메서드==//
+    public static DailyPlan createDailyTodo(User user, Long todoId){
+        DailyPlan daily = new DailyPlan();
+        daily.setUser(user);
+        daily.setTodoId(todoId);
+        daily.setDay(LocalDate.now());
+        return daily;
+    }
+
     @Data
     public static class Important{
         private Long todoId;
