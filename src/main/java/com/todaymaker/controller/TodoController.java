@@ -12,6 +12,7 @@ import com.todaymaker.service.TodoService;
 import com.todaymaker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
@@ -36,9 +37,13 @@ public class TodoController {
     private final TodoService todoService;
     private final UserService userService;
     private final DailyPlanService dailyPlanService;
+    @Value("${testerId}")
+    private Long testerId;
+    @Value("${testerLoginId}")
+    private String testerLoginId;
 
     @GetMapping("/")
-    public String home(HttpServletRequest req, Model model) {
+    public String home(HttpServletRequest req) {
         HttpSession session = req.getSession(false);
         if(session == null){
             return "index";
@@ -47,7 +52,8 @@ public class TodoController {
         if(loginId == null){
             return "index";
         }
-        return "redirect:/todos";
+        //return "redirect:/todos";
+        return "index";
     }
 
     @GetMapping("/todo")
@@ -100,6 +106,15 @@ public class TodoController {
         model.addAttribute("date", LocalDateTime.now());
 
         return "todo/todos";
+    }
+
+    //쌤플 유저로 사용해보기
+    @GetMapping(value = "/todos/tester")
+    public String testerUse(HttpSession session) {
+        session.setAttribute("userId", testerId);
+        session.setAttribute("loginId", testerLoginId);
+
+        return "redirect:/todos";
     }
 
 }

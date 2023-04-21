@@ -200,3 +200,12 @@ label {
 #todayList .i {
     margin-top: 0px;
 }
+#add {
+    min-width: 60px;
+}
+@media screen and (max-width: 1000px) {  /*1000px 이하시*/
+    #add {
+        padding: 0.375rem 0.5rem;
+        min-width: 50px;
+    }
+}

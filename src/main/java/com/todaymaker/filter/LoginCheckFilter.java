@@ -12,7 +12,7 @@ import java.io.IOException;
 @Slf4j
 public class LoginCheckFilter implements Filter {
 
-    private static final String[] whiteList = {"/", "/login", "/join", "/css/*", "/js/*"};
+    private static final String[] whiteList = {"/", "/login", "/join", "/css/*", "/js/*", "/images/*", "/todos/tester"};
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
@@ -24,9 +24,8 @@ public class LoginCheckFilter implements Filter {
             log.info("로그인 체크 필터 시작 {}", requestURI);
             if (!PatternMatchUtils.simpleMatch(whiteList, requestURI)) {  //whileList가 아니면 로그인 체크
                 log.info("로그인 체크 로직 실행 {}", requestURI);
-                //HttpSession session = httpRequest.getSession(false);
-                HttpSession session = httpRequest.getSession(true);
-                if(session == null || session.getAttribute("loginId") == null){
+                HttpSession session = httpRequest.getSession(false);
+                if(session == null || session.getAttribute("userId") == null){
                     log.info("미로그인 사용자");
                     httpResponse.sendRedirect("/login");
                     return; //미로그인 유저는 서블릿/컨트롤러를 호출하지 않고 여기서 끝
