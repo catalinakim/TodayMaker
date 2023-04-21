@@ -186,7 +186,7 @@ $(document).ready(function() {
             }
         });
     });
-    function addTodayTodosListener(){
+    function addTodayTodosListener(){  //Drag & Drop
         let items = document.querySelectorAll('#todayList > div'); //Drag and Drop Sortable List
         items.forEach(item => {
             $(item).prop('draggable', true);
@@ -318,30 +318,52 @@ $(document).ready(function() {
             }
         })
     });
-    $(document).on('click','i.cate-del',function (){ //카테고리 삭제(하위카테고리도 삭제)
+    $(document).on('click','i.cate-del',function (){ //카테고리 삭제(하위카테고리 후 삭제가능)
         var id = $(this).siblings('button').val();
         var parent = $(this).parent();
-        $.ajax({
-            url: '/categories/'+id,
-            type: 'DELETE',
-            context: this,
-            success: function(data) {
-                //상위/서브카테고리 삭제시 할일들 -> 노카테고리zone으로 보내기
-                if(data == id){
-                    if($(this).siblings('button').hasClass("sub-cate")){//서브카테고리 삭제시 하위할일 밑으로
-                        let subTodos = $(this).parent().next('div').children();
-                        subTodos.removeClass('sub-todo');
-                        subTodos.appendTo('#noCateZone');
-                        $(this).parent().next('div').children().remove();
-                    }else{  //상위카테고리 삭제시에도 할일들 밑으로(노카테고리 영역으로)
-                        let todos = $(this).parent().next('div').children('ul');
-                        todos.appendTo('#noCateZone');
-                        $(this).parent().next('div').children('ul').remove();
+        //상위, 하위카테고리 여부
+        var isSub = $(this).siblings('button').hasClass('sub-cate');  //true: 하위, false: 상위
+        var TopHasNotSub = false;
+        if(!isSub){  //상위카테고리이면 하위카테고리 여부 확인
+            console.log("상위카테고리");
+            $.ajax({
+                url: '/categories/'+id+'/sub',
+                type: 'GET',
+                async: false,
+                success: function(has) { //하위카테고리 존재시 alert
+                    console.log("하위카테고리 존재여부", has);
+                    if(has){
+                        $(".cate-alert").fadeTo(2500, 500).slideUp(500, function(){
+                            $(".cate-alert").slideUp(500);
+                        });
+                    }else{
+                        TopHasNotSub = true;
                     }
-                    parent.remove();
                 }
-            }
-        })
+            })
+        }
+        if(isSub || TopHasNotSub){
+            console.log("하위 or 하위없는 상위");
+            $.ajax({
+                url: '/categories/'+id,
+                type: 'DELETE',
+                // data: JSON.stringify({id: id, isSub: isSub}),
+                // contentType: 'application/json; charset=utf-8',
+                // dataType: 'json',
+                context: this,
+                success: function(data) {
+                    //카테고리 삭제시 할일들 노카테고리존으로 보내기
+                    if(data == id){
+                        let todos = $(this).parent().next('div').children('ul');
+                        if(isSub){
+                            todos.removeClass('sub-todo');
+                        }
+                        todos.appendTo('#noCateZone');
+                        parent.remove();
+                    }
+                }
+            })
+        }
     });
     $(document).on('click','i.star',function (){
         var todoId = $(this).siblings('input:checkbox').val();

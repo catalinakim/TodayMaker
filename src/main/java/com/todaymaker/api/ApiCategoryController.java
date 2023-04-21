@@ -47,9 +47,15 @@ public class ApiCategoryController {
 
     @DeleteMapping("/categories/{id}")
     public Long delCategory(@PathVariable Long id){
-        Long delId = categoryService.deleteWithSubCategory(id);
+        Long delId = categoryService.deleteCategory(id);
         return delId;
     }
+
+    @GetMapping("/categories/{id}/sub")
+    public boolean hasSubCategory(@PathVariable Long id){
+        return categoryService.hasSubCategory(id);
+    }
+
     
     //@DeleteMapping("/categories/sub/{id}")
     //public Long delSubCategory(@PathVariable Long id){
@@ -60,6 +66,12 @@ public class ApiCategoryController {
     @Data
     static class EditCateDto{
         private String name;
+    }
+
+    @Data
+    static class DelCateDto{
+        private Long id;
+        private boolean isSub;
     }
 
 

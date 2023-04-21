@@ -24,7 +24,8 @@ public class LoginCheckFilter implements Filter {
             log.info("로그인 체크 필터 시작 {}", requestURI);
             if (!PatternMatchUtils.simpleMatch(whiteList, requestURI)) {  //whileList가 아니면 로그인 체크
                 log.info("로그인 체크 로직 실행 {}", requestURI);
-                HttpSession session = httpRequest.getSession(false);
+                //HttpSession session = httpRequest.getSession(false);
+                HttpSession session = httpRequest.getSession(true);
                 if(session == null || session.getAttribute("loginId") == null){
                     log.info("미로그인 사용자");
                     httpResponse.sendRedirect("/login");

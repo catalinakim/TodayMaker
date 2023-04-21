@@ -19,9 +19,9 @@ public class InitDb {
 
     //@PostConstruct
     public void init() {
-        initService.initTestUser();
+        //initService.initTestUser();
         initService.initCategory();
-        log.info("init '테스트 유저, 카테고리 쌤플 생성' 실행");
+        log.info("init '카테고리 생성' 실행");
     }
 
     @Component
@@ -29,6 +29,8 @@ public class InitDb {
     @RequiredArgsConstructor
     private static class InitService {
         private final EntityManager em;
+        private Long cateId1;
+        private Long cateId2;
         public void initTestUser() {
             User tester = createMember("test", "2022");
             em.persist(tester);
@@ -38,6 +40,12 @@ public class InitDb {
             Category basicCategory2 = createCategory("건강관리");
             em.persist(basicCategory1);
             em.persist(basicCategory2);
+            cateId1 = basicCategory1.getId();
+            cateId2 = basicCategory2.getId();
+            Category sub1 = createSubCategory("MVP 완성", basicCategory1);
+            Category sub2 = createSubCategory("운동", basicCategory2);
+            em.persist(sub1);
+            em.persist(sub2);
         }
 
         private User createMember(String loginId, String password) {
@@ -49,6 +57,12 @@ public class InitDb {
         private Category createCategory(String name) {
             Category category = new Category();
             category.setName(name);
+            return category;
+        }
+        private Category createSubCategory(String name, Category parent){
+            Category category = new Category();
+            category.setName(name);
+            category.setParent(parent);
             return category;
         }
     }

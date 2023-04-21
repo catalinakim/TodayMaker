@@ -43,7 +43,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public Long deleteWithSubCategory(Long id) {
+    public Long deleteWithSubCategory(Long id) { //상위/하위 구분X, 하위있으면 하위삭제, 할일 데이터 유지
         Optional<Category> categories = categoryRepository.findById(id);
         categories.ifPresent(category -> {
             for(Todo todo : category.getTodos()){
@@ -66,7 +66,7 @@ public class CategoryService {
         return id;
     }
     @Transactional
-    public Long deleteWithoutSubCategory(Long id) {
+    public Long deleteWithoutSubCategory(Long id) { //상위/하위 구분X, 하위있으면 null처리 후 데이터 유지, 할일 데이터 유지
         Optional<Category> category = categoryRepository.findById(id);
         category.ifPresent(category1 -> {
             for(Todo todo : category1.getTodos()){
@@ -83,6 +83,23 @@ public class CategoryService {
         categories.ifPresent(category -> {
             category.setName(name);
         });
+        return id;
+    }
+
+    public boolean hasSubCategory(Long id) {
+        Long num = categoryRepository.countByParentId(id);
+        return num > 0 ? true : false;
+    }
+
+    @Transactional
+    public Long deleteCategory(Long id) {  //상위/하위 구분필요X(하위있으면 삭제막음), 할일 데이터 유지
+        Category category = categoryRepository.findById(id).orElse(null);
+        if(category != null){
+            for (Todo todo : category.getTodos()) {
+                todo.setCategoryNull();
+            }
+            categoryRepository.deleteById(id);
+        }
         return id;
     }
 }
