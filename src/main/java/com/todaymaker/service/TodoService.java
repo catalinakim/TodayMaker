@@ -68,7 +68,8 @@ public class TodoService {
     @Transactional(readOnly = true)
     public List<DailyPlan.TodayTodos> getTodayTodos(Long userId) {
         User user = userJpaRepository.findOne(userId);
-        List<DailyPlan> todays = dailyPlanRepository.findByUserAndDay(user, LocalDate.now());
+        //List<DailyPlan> todays = dailyPlanRepository.findByUserAndDay(user, LocalDate.now());
+        List<DailyPlan> todays = dailyPlanRepository.findTodayOrderByPriority(user, LocalDate.now());
         List<DailyPlan.TodayTodos> todayTodosDto = new ArrayList<>();
         for (DailyPlan todayRow : todays) {
             Todo todo = todoRepository.findById(todayRow.getTodoId()).orElse(null);
