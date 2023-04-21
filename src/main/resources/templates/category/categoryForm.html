@@ -2,34 +2,38 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/header :: header">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="../../static/css/custom.css" rel="stylesheet">
 </head>
 
 <body>
 <hr class="my-4">
-<form role="form" action="/category" th:object="${category}" method="post">
-    <input type="hidden" name="userId" th:value="${session.userId}">
+<div class="container">
+    <form role="form" action="/category" th:object="${category}" method="post">
+        <input type="hidden" name="userId" th:value="${session.userId}">
 
-    <div class="form-group">
-        <label for="category">상위 카테고리</label>
-        <select name="parent.id" th:field="*{parent.id}" id="category" class="form-control">
-<!--            <option value="">카테고리 선택</option>-->
-            <option value="">[상위카테고리 생성]</option>
-            <option th:each="category : ${categories}"
-                    th:value="${category.id}"
-                    th:text="${category.name}" />
-        </select>
-    </div>
-
-    <div class="form-group">
-        <label for="name">카테고리 이름</label>
-        <input type="text" th:field="*{name}" class="form-control" id="name"
-               placeholder="생성할 카테고리 이름을 입력하세요">
-        <div class="field-error" th:errors="*{name}">
-            카테고리명 오류
+        <div class="form-group">
+            <label for="category">상위 카테고리</label>
+            <select name="parent.id" th:field="*{parent.id}" id="category" class="form-control">
+    <!--            <option value="">카테고리 선택</option>-->
+                <option value="">[상위카테고리 생성]</option>
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:text="${category.name}" />
+            </select>
         </div>
-    </div>
-    <br>
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
+
+        <div class="form-group">
+            <label for="name">카테고리 이름</label>
+            <input type="text" th:field="*{name}" class="form-control" id="name"
+                   placeholder="생성할 카테고리 이름을 입력하세요">
+            <div class="field-error" th:errors="*{name}">
+                카테고리명 오류
+            </div>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
 </body>
 </html>

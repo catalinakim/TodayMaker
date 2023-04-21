@@ -10,6 +10,7 @@ function showSubCategories(e) {
             cache: false
         })
         .done(function (data, textStatus, jqXHR) {
+
             const subCateArr = data;
             for (let i = 0; i < subCateArr.length; i++) {
                 let subhtml = '<div class="v-center cate">'
@@ -19,7 +20,7 @@ function showSubCategories(e) {
                     + '<i class="fa-regular fa-trash-can fa-sm cate-del"></i>'
                     + '</div>'
                     + '<div class="collapse sub-todo" id="sub-cate' + subCateArr[i]["id"]+ '"></div>';
-                $("#cate"+id).html(subhtml);
+                $("#cate"+id).append(subhtml);
             }
             getSubCategories[id] = true;
             getTodos(id);
