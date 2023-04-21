@@ -1,5 +1,6 @@
 package com.todaymaker.controller;
 
+import com.todaymaker.Login;
 import com.todaymaker.domain.Category;
 import com.todaymaker.dto.CategoryDto;
 import com.todaymaker.service.CategoryService;
@@ -37,12 +38,12 @@ public class CategoryController {
     }
 
     @PostMapping("/category")
-    public String addCategory(@ModelAttribute Category category, BindingResult bindingResult) {
+    public String addCategory(@Login Long userId, @ModelAttribute Category category, BindingResult bindingResult) {
         //카테고리명 중복 불가
         if(!StringUtils.hasText(category.getName())){
             bindingResult.addError(new FieldError("category","name","카테고리명 공백 불가"));
         }
-        if(categoryService.checkName(category.getName()) != null){
+        if(categoryService.checkName(category.getName(), userId) != null){
             bindingResult.addError(new FieldError("category", "name", category.getName(),false,null,null, "카테고리명 중복"));
         }
         if(bindingResult.hasErrors()){

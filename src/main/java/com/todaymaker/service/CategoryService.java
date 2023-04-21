@@ -38,8 +38,8 @@ public class CategoryService {
         return categoryRepository.findByUserIdAndParentIsNull(userId);
     }
 
-    public Category checkName(String name) {
-        return categoryRepository.findByName(name);
+    public Category checkName(String name, Long userId) {
+        return categoryRepository.findByUserIdAndName(userId, name);
     }
 
     @Transactional
