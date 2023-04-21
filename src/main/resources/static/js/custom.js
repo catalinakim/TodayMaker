@@ -342,6 +342,16 @@ $(document).ready(function() {
                 }
             })
         }
+        //토글을 안열었었으면 할일 가져와서 보내기
+        var hasTodo = $(this).parent().next().children('ul').hasClass('todo');
+        console.log("hasTodo: ", hasTodo);
+        if(hasTodo == false){
+            if(!isSub){
+                getTodos(id);
+            }else{
+                $(".sub-cate").trigger("click");
+            }
+        }
         if(isSub || TopHasNotSub){
             console.log("하위 or 하위없는 상위");
             $.ajax({
@@ -353,6 +363,7 @@ $(document).ready(function() {
                 context: this,
                 success: function(data) {
                     //카테고리 삭제시 할일들 노카테고리존으로 보내기
+
                     if(data == id){
                         let todos = $(this).parent().next('div').children('ul');
                         if(isSub){
