@@ -100,8 +100,6 @@ $(document).ready(function() {
     todayImportantOn();
     addTodayTodosListener();
 
-    $('#today-each').slice(0,3).css('border', '1px solid #f0a591');
-
     $("#add").click(function() {  //오늘할일에 추가
         var checkedTodos = $('input[type=checkbox]:checked:not(:disabled)').map(function() {
             return this.value;
@@ -202,33 +200,29 @@ $(document).ready(function() {
     }
     function dropped (e) {
         cancelDefault(e);
-        // get new and old index
-        let oldIndex = e.dataTransfer.getData('text/plain'); //드래그앤드롭으로 이동한 데이터
-        // let target = $(e.target)  //이벤트가 발생한 요소(drop한 곳에 위치한 객체)
+        let oldIndex = e.dataTransfer.getData('text/plain'); //옮기려는 요소의 원래 위치
         let target;
-        if ($(e.target).is('div')) {
+        if ($(e.target).is('div#today-each')) {
             target = $(e.target);
         }else{
-            target = $(e.target).parent();
+            target = $(e.target).closest('div#today-each');
         }
-        let newIndex = target.index();
+        // console.log(e.target.tagName, e.target.id);
+        // console.log("target:", target.prop('tagName'), target.prop('id'));
 
-        // remove dropped items at old place
-        let dropped = $(this).parent().children().eq(oldIndex).remove(); //oldIndex인 요소 삭제
+        let newIndex = target.index();
         console.log("newIndex: "+newIndex+", oldIndex: "+oldIndex);
 
-        // insert the dropped items at new place
+        if(oldIndex == newIndex) return;
+
+        let dropped = $(this).parent().children().eq(oldIndex).remove();
+
+        //새 위치에 추가
         if (newIndex < oldIndex) {
             target.before(dropped); //target 앞에 추가
         } else {
             target.after(dropped);
         }
-        //3순위 border 컬러 갱신
-        if(newIndex <= 2 || oldIndex <= 2){  //3순위 이하꺼를 옮기거나, 3순위 이하로 옮겨지면
-            $('#today-each').slice(0,3).css('border', '1px solid #f0a591');
-            $('#today-each').slice(3).css('border', '1px solid #ccc');
-        }
-
     }
     function cancelDefault (e) {
         e.preventDefault();
