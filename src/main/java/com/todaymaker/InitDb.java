@@ -19,7 +19,7 @@ public class InitDb {
 
     private final InitService initService;
 
-    @PostConstruct
+    //@PostConstruct
     public void init() {
         //initService.initTestUser();
         initService.initCategory();
@@ -38,18 +38,18 @@ public class InitDb {
             em.persist(tester);
         }
         public void initCategory() {
-            Category basicCategory1 = createCategory("취업준비");
+            Category basicCategory1 = createCategory("업무");
             Category basicCategory2 = createCategory("건강관리");
             em.persist(basicCategory1);
             em.persist(basicCategory2);
             cateId1 = basicCategory1.getId();
             cateId2 = basicCategory2.getId();
-            Category sub1 = createSubCategory("MVP 완성", basicCategory1);
+            Category sub1 = createSubCategory("프로젝트", basicCategory1);
             Category sub2 = createSubCategory("운동", basicCategory2);
             em.persist(sub1);
             em.persist(sub2);
-            Todo todo1 = createTodo("배포", basicCategory1);
-            Todo todo1sub = createTodo("API 명세/컨트롤러 일치", sub1);
+            Todo todo1 = createTodo("이메일 확인", basicCategory1);
+            Todo todo1sub = createTodo("보고서 작성", sub1);
             Todo todo2 = createTodo("샐러드", basicCategory2);
             Todo todo2sub = createTodo("코어", sub2);
             em.persist(todo1);

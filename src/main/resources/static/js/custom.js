@@ -247,7 +247,13 @@ $(document).ready(function() {
             $(this).siblings('input:text').val('').val(text);
         }
     });
-    $(document).on('blur', '.todo input:text', function(e) {  //할일수정 후
+    $(document).on('keyup', '.todo input:text', function(e) {
+        if (e.keyCode === 13) {
+            console.log("enter -> blur");
+            $(this).blur();
+        }
+    });
+    $(document).on('blur', '.todo input:text', function() {  //할일수정 후
         $(this).siblings('label').text($(this).val()).show();
         $(this).hide();
         var newName = $(this).val();
@@ -279,6 +285,12 @@ $(document).ready(function() {
             $(this).before('<input type="text" value="'+cateName+'" />');
             $(this).prev('input:text').focus();
             $(this).prev('input:text').val('').val(cateName);
+        }
+    });
+    $(document).on('keyup', '.cate input:text', function(e) {
+        if (e.keyCode === 13) {
+            console.log("enter -> blur");
+            $(this).blur();
         }
     });
     $(document).on('blur', '.cate input:text', function(e) { //카테고리 수정후
