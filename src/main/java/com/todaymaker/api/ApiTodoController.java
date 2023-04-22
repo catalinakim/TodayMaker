@@ -6,6 +6,7 @@ import com.todaymaker.domain.Todo;
 import com.todaymaker.service.TodoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -31,17 +32,14 @@ public class ApiTodoController {
         return result;
     }
 
-    @PostMapping("/todos/today")
+    @PostMapping("/today")  //오늘할일에 추가
     public List<DailyPlan.TodayTodos> addTodo(@Login Long userId, @RequestBody List<Long> todoIds) {
         List<DailyPlan.TodayTodos> savedTodosAtToday = todoService.saveTodoToday(userId, todoIds);
-        for (DailyPlan.TodayTodos todayTodos : savedTodosAtToday) {
-            System.out.println("daily row id = " + todayTodos.getId());
-        }
 
         return savedTodosAtToday;
     }
 
-    @DeleteMapping("/todos/today")
+    @DeleteMapping("/today")
     public Long removeFromToday(@RequestBody Long todoId){
         todoService.removeFromToday(todoId);
         return todoId;
@@ -62,8 +60,8 @@ public class ApiTodoController {
     }
 
     @PostMapping("/todos")
-    public Todo addTodo(@RequestBody CreateTodoDto dto){
-        return todoService.addTodo(dto);
+    public Todo addTodo(@Login Long userId, @RequestBody CreateTodoDto dto){
+        return todoService.addTodo(userId, dto.getCategoryId(), dto.getName());
     }
 
     @GetMapping("/categories/sub/{cateId}")
@@ -87,8 +85,8 @@ public class ApiTodoController {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class CreateTodoDto {
-        private Long userId;
         private Long categoryId;
         private String name;
     }

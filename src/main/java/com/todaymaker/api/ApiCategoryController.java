@@ -30,7 +30,7 @@ public class ApiCategoryController {
         return result;
     }
 
-    @GetMapping("/categories/{id}/subcategories")
+    @GetMapping("/categories/{id}")
     public List<CategoryDto> subCategoryList(@PathVariable Long id) {
         List<Category> subCateList = categoryJpaRepository.findSub(id);
         List<CategoryDto> result = subCateList.stream()

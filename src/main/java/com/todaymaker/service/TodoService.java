@@ -91,10 +91,10 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
     @Transactional
-    public Todo addTodo(ApiTodoController.CreateTodoDto dto) {
-        User user = userJpaRepository.findOne(dto.getUserId());
-        Category category = categoryRepository.findById(dto.getCategoryId()).get();
-        Todo todo = Todo.createTodo(user, category, dto.getName());
+    public Todo addTodo(Long userId, Long categoryId, String name) {
+        User user = userJpaRepository.findOne(userId);
+        Category category = categoryRepository.findById(categoryId).get();
+        Todo todo = Todo.createTodo(user, category, name);
         return todoRepository.save(todo);
     }
 

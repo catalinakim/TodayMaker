@@ -3,7 +3,7 @@ let todayTodoIds = new Array();
 function showSubCategories(e) {
     var id = $(e).val();
     if($(e).attr('aria-expanded')=="true" && getSubCategories[id]==false){
-        var url = "/categories/"+id+"/subcategories";
+        var url = "/categories/"+id;
         $.ajax({
             url: url,
             type:"GET",
@@ -106,7 +106,7 @@ $(document).ready(function() {
             return this.value;
         }).get();
         $.ajax({
-            url: '/todos/today',
+            url: '/today',
             type: 'POST',
             data: JSON.stringify(checkedTodos),
             contentType: 'application/json; charset=utf-8',
@@ -115,7 +115,7 @@ $(document).ready(function() {
                 const row = data;
                 for (let i = 0; i < row.length; i++) {
                     let subhtml = '<div id="today-each" class="d-flex">' +
-                        '<input type="hidden" id="todo" value="'+row[i].id+'"/>' +
+                        '<input type="hidden" id="dailyId" value="'+row[i].id+'"/>' +
                         '<input type="hidden" id="priority" value="'+row[i].priority+'"/>' +
                         '<input type="checkbox" id="todayTodo' + row[i].todoId+ '" value="' + row[i].todoId+ '">' +
                         '<label for="todayTodo' + row[i].todoId+ '">' + row[i].name+ '</label>' +
@@ -169,7 +169,7 @@ $(document).ready(function() {
     $(document).on("click", ".today-minus", function(){  //오늘할일에서 제외 클릭시
         var id = $(this).siblings('input:checkbox').val();
         $.ajax({
-            url: '/todos/today',
+            url: '/today',
             type: 'DELETE',
             data: id,
             contentType: 'application/json; charset=utf-8',
@@ -384,16 +384,16 @@ $(document).ready(function() {
         }
     });
     $(document).on('click','i.star',function (){
-        var todoId = $(this).siblings('input:checkbox').val();
+        var dailyId = $(this).siblings('input:hidden[id="dailyId"]').val();
         $.ajax({
             url: '/today',
             type: 'PUT',
-            data: JSON.stringify({todoId: todoId, important: $(this).hasClass('star-on') ? false : true}),
+            data: JSON.stringify({id: dailyId, important: $(this).hasClass('star-on') ? false : true}),
             contentType: 'application/json; charset=utf-8',
             dataType: 'json',
             context: this,
             success: function(res) {
-                if(todoId == res){
+                if(dailyId == res){
                     if($(this).hasClass('star-on')) {
                         $( this ).removeClass( "star-on fa-solid" );
                         $( this ).addClass( "fa-regular" );
@@ -406,14 +406,13 @@ $(document).ready(function() {
         });
     });
 
-    $(document).on('click', '.dropdown-menu a', function() {
+    $(document).on('click', '.dropdown-menu a', function() {  //우선순위 지정
         var num = $(this).attr('value');
         var btnDiv = $(this).closest('#today-each').find('div#pri-btn-div');
         var clickTag = this;
         var AhadNum = $("ul#todayList").find("a.pa"+num);
-        var pastId = AhadNum.parent().siblings('input:hidden[id="todo"]').val();
-        console.log('pastId ', pastId);
-        if(pastId !== undefined){ //기존 애는 0으로 저장 후 hide
+        var pastId = AhadNum.parent().siblings('input:hidden[id="dailyId"]').val();
+        if(pastId !== undefined){ //해당 순위가 다른 곳에 지정되어있었다면, 기존 것은 0으로 저장 후 remove
             $.ajax({
                 url: '/today/priority',
                 type: 'PUT',
@@ -425,7 +424,7 @@ $(document).ready(function() {
                 }
             });
         }
-        var newId = $(clickTag).closest('#today-each').find('input:hidden[id="todo"]').val();
+        var newId = $(clickTag).closest('#today-each').find('input:hidden[id="dailyId"]').val();
         console.log('new id:', newId);
         $.ajax({ //새로운 애는 우선순위 저장 후 html 대체
             url: '/today/priority',

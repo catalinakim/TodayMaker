@@ -15,8 +15,8 @@ public class ApiDailyPlanController {
 
     @PutMapping("/today")
     public Long setImportant(@RequestBody TodayImpDto dto){
-        dailyPlanService.setImportant(dto.getTodoId(), dto.isImportant());
-        return dto.getTodoId();
+        dailyPlanService.setImportant(dto.getId(), dto.isImportant());
+        return dto.getId();
     }
     @PutMapping("/today/priority")
     public Long setImportant(@RequestBody TodayPriorityDto dto){
@@ -25,7 +25,7 @@ public class ApiDailyPlanController {
     }
     @Data
     static class TodayImpDto{
-        private Long todoId;
+        private Long id;
         private boolean important;
     }
 

@@ -91,7 +91,7 @@
             <div id="today">
                 <ul id="todayList" class="btn-toggle-nav list-unstyled moveable" >
                     <div id="today-each" class="d-flex" th:each="row : ${todayTodos}" >
-                        <input type="hidden" id="todo" th:value="${row.id}"/>
+                        <input type="hidden" id="dailyId" th:value="${row.id}"/>
                         <input type="hidden" id="priority" th:value="${row.priority}"/>
                         <input type="checkbox" th:id="'todayTodo'+${row.todoId}" th:value="${row.todoId}">
                         <label th:for="todayTodo+${row.todoId}" th:text="${row.name}">할일</label>

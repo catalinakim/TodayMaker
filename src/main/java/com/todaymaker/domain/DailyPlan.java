@@ -16,7 +16,7 @@ import static javax.persistence.FetchType.LAZY;
 public class DailyPlan {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long Id;
+    private Long id;
 
     private LocalDate day;
 

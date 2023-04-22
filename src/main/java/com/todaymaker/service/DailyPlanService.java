@@ -17,10 +17,12 @@ public class DailyPlanService {
     private final DailyPlanRepository dailyPlanRepository;
 
     @Transactional
-    public Long setImportant(Long todoId, boolean important){
-        DailyPlan dailyPlan = dailyPlanRepository.findByTodoIdAndDayEquals(todoId, LocalDate.now());
-        dailyPlan.setImportant(important);
-        return todoId;
+    public Long setImportant(Long dailyId, boolean important){
+        DailyPlan dailyPlan = dailyPlanRepository.findById(dailyId).orElse(null);
+        if(dailyPlan != null){
+            dailyPlan.setImportant(important);
+        }
+        return dailyId;
     }
 
     public List<DailyPlan.Important> getImpList() {
