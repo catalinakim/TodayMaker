@@ -1,10 +1,8 @@
 package com.todaymaker.api;
 
 import com.todaymaker.Login;
-import com.todaymaker.domain.Category;
 import com.todaymaker.domain.DailyPlan;
 import com.todaymaker.domain.Todo;
-import com.todaymaker.dto.CategoryDto;
 import com.todaymaker.service.TodoService;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 

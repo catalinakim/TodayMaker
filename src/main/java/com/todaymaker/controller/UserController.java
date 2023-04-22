@@ -54,7 +54,7 @@ public class UserController {
         return "user/login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/login/form")
     public String login(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult bindingResult, HttpServletRequest req) {
         if(bindingResult.hasErrors()){
             return "user/login";
@@ -69,7 +69,6 @@ public class UserController {
         session.setAttribute("userId", loginUser.getId());
 
         return "redirect:/";
-
     }
 
     @PostMapping("/logout")
