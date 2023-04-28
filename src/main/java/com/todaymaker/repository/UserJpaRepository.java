@@ -27,4 +27,8 @@ public class UserJpaRepository {
                 .setParameter("loginId", loginId)
                 .getResultList();
     }
+
+    public void clear(){
+        em.clear();
+    }
 }

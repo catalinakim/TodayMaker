@@ -111,8 +111,11 @@ public class TodoController {
     //쌤플 유저로 사용해보기
     @GetMapping(value = "/todos/tester")
     public String testerUse(HttpSession session) {
-        session.setAttribute("userId", testerId);
-        session.setAttribute("loginId", testerLoginId);
+        User user = userService.findUser(testerId);
+        if(user != null){
+            session.setAttribute("userId", testerId);
+            session.setAttribute("loginId", testerLoginId);
+        }
 
         return "redirect:/todos";
     }
