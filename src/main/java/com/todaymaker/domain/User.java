@@ -48,7 +48,6 @@ public class User {
     }
 
     public User(String loginId, String password, String email) {
-        System.out.println("in const");
         this.loginId = loginId;
         this.password = password;
         this.email = email;
@@ -60,7 +59,6 @@ public class User {
     }
 
     public void setLoginId(String loginId) {
-        System.out.println("in setLoginId");
         this.loginId = loginId;
     }
 

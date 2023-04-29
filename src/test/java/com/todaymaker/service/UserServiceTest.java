@@ -29,4 +29,10 @@ class UserServiceTest {
         User savedUser = userService.save(new User("aaa", "1234", "aaa@a.ai"));
         Assertions.assertEquals(savedUser, userJpaRepository.findOne(savedUser.getId()));
     }
+
+    @Test
+    void 중복ID_예외(){
+        User user = userService.save(new User("aaa", "1234", "aaa@a.ai"));
+        Assertions.assertThrows(IllegalStateException.class, ()-> userService.duplicate(user.getLoginId()));
+    }
 }
