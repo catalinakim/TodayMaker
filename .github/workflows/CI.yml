@@ -22,7 +22,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '11'
-          distribution: 'zulu'
+          distribution: 'temurin'
 
       # application.properties를 프로젝트에 포함
       - name: add Application.properties
