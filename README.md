@@ -10,22 +10,28 @@ SpringBoot, JPA를 활용한 사이드 프로젝트
 
 ### 기술스택
 #### 백엔드
+<p>
 <img src="https://img.shields.io/badge/Java 17-26689A?style=for-the-badge&logo=oracle&logoColor=white">
 <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/spring data jpa-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 <img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white">
+</p>
 
 #### 프론트
+<p>
 <img src="https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white">
 <img src="https://img.shields.io/badge/JavaScript-4B4B77?style=for-the-badge&logo=javascript&logoColor=white">
 <img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white">
+</p>
 
 #### DB, CI/CD
+<p>
 <img src="https://img.shields.io/badge/MySQL-005C84?style=for-the-badge&logo=mysql&logoColor=white">
 <img src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazon-aws&logoColor=white">
 <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white">
 <img src="https://img.shields.io/badge/GitHub_Actions-2088FF?style=for-the-badge&logo=github-actions&logoColor=white">
+</p>
 
 ### 시스템구조
 ![today아키텍쳐](https://user-images.githubusercontent.com/22388388/235873938-911dbb84-cb89-4a39-a2f0-5d575cce915a.jpg)
@@ -34,10 +40,10 @@ SpringBoot, JPA를 활용한 사이드 프로젝트
 [https://todaymaker.click](https://https://todaymaker.click/)
 
 ### DB ERD
-![erd_230503](https://user-images.githubusercontent.com/22388388/235876010-5183f038-3c39-4d79-b1dd-5e68a46b1a8c.png)
+<img src="https://user-images.githubusercontent.com/22388388/235876010-5183f038-3c39-4d79-b1dd-5e68a46b1a8c.png" width="700px">
 
 ### API
-![api-230503](https://user-images.githubusercontent.com/22388388/235876569-3437df44-432a-49ed-a934-a01ce0e343a8.png)
+<img src="https://user-images.githubusercontent.com/22388388/235876569-3437df44-432a-49ed-a934-a01ce0e343a8.png" width="700px">
 
 ### 화면구성
 ![pic1](https://user-images.githubusercontent.com/22388388/235879635-c586e156-b26c-4009-9942-7bef07640fd9.png)
