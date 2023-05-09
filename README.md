@@ -1,5 +1,8 @@
 # TodayMaker
-SpringBoot, JPA를 활용한 사이드 프로젝트
+SpringBoot, JPA를 활용한 "오늘 할일 관리" 서비스
+
+### 주소
+[https://todaymaker.click](https://https://todaymaker.click/)
 
 ### 기능
 - 할일을 카테고리별로 관리합니다.
@@ -14,13 +17,12 @@ SpringBoot, JPA를 활용한 사이드 프로젝트
 <img src="https://img.shields.io/badge/Java 17-26689A?style=for-the-badge&logo=oracle&logoColor=white">
 <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
 <img src="https://img.shields.io/badge/spring data jpa-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
-<img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 <img src="https://img.shields.io/badge/junit5-25A162?style=for-the-badge&logo=junit5&logoColor=white">
 </p>
 
 #### 프론트
 <p>
-<img src="https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white">
+<img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
 <img src="https://img.shields.io/badge/JavaScript-4B4B77?style=for-the-badge&logo=javascript&logoColor=white">
 <img src="https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white">
 </p>
@@ -35,9 +37,6 @@ SpringBoot, JPA를 활용한 사이드 프로젝트
 
 ### 시스템구조
 ![today아키텍쳐](https://user-images.githubusercontent.com/22388388/235873938-911dbb84-cb89-4a39-a2f0-5d575cce915a.jpg)
-
-### 주소
-[https://todaymaker.click](https://https://todaymaker.click/)
 
 ### DB ERD
 <img src="https://user-images.githubusercontent.com/22388388/235876010-5183f038-3c39-4d79-b1dd-5e68a46b1a8c.png" width="700px">
